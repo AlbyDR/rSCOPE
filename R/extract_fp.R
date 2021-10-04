@@ -193,7 +193,7 @@ extract_fp <- function(
                                      crs = "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 
   # reduce the FP area to the elipse that the probability is equal to the input FP_probs (suggested 0.99)
-  footprint[which(raster::values(footprint) <= stats::quantile(footprint, probs = FP_probs, names = FALSE))] <- NA
+  footprint[which(raster::values(footprint) <= raster::quantile(footprint, probs = FP_probs, names = FALSE))] <- NA
   raster::values(footprint) <- raster::values(footprint)*1/sum(raster::values(footprint), na.rm = TRUE)
 
   ### if is a multilayer raster fix in time

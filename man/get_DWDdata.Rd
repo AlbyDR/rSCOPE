@@ -2,8 +2,6 @@
 % Please edit documentation in R/get_DWDdata.R
 \name{get_DWDdata}
 \alias{get_DWDdata}
-\alias{get_Solardata}
-\alias{get_SMCdata}
 \title{get_DWDdata}
 \usage{
 get_DWDdata(
@@ -17,28 +15,6 @@ get_DWDdata(
   end_date,
   var_name,
   by_lag = "hour",
-  data_dir = tempdir()
-)
-
-get_Solardata(
-  lat_center,
-  lon_center,
-  radius_km,
-  time_lag = "hourly",
-  meteo_var = "solar",
-  start_date,
-  end_date,
-  data_dir = tempdir()
-)
-
-get_SMCdata(
-  lat_center,
-  lon_center,
-  radius_km,
-  time_lag = "daily",
-  meteo_var = "soil",
-  start_date,
-  end_date,
   data_dir = tempdir()
 )
 }
@@ -72,13 +48,6 @@ a list with: 1- a data.frame with the selected variable per station id for the s
 This is a function to download DWD data based on a buffer distance.
 The meteorological variables are provide in data.frame per station id.
 }
-\section{Functions}{
-\itemize{
-\item \code{get_Solardata}: solar radiation specific function
-
-\item \code{get_SMCdata}: daily soil moisture specific function
-}}
-
 \examples{
 ##### meteo_var options
 # "precipitation"       "air_temperature"     "extreme_temperature"   "extreme_wind"

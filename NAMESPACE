@@ -3,6 +3,8 @@
 export(calculate_zd_z0)
 export(extract_fp)
 export(get_DWDdata)
+export(get_SMCdata)
+export(get_Solardata)
 export(get_fisbroker_map)
 export(get_parameters)
 export(get_predictions)

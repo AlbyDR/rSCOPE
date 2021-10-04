@@ -135,8 +135,8 @@ get_DWDdata <- function(
   data_set <- rdwd::readDWD(data_name, varnames = FALSE, tz = "UTC") #, format = NULL
 
   delete_staions <- as.vector(stats::na.omit(sapply(1:length(data_set), function(i)
-    ifelse((as.Date(utils::tail(data_set[[i]]$MESS_DATUM, n=1)) >= as.Date(end_date)) == FALSE |
-             (as.Date(utils::head(data_set[[i]]$MESS_DATUM, n=1)) <= as.Date(start_date)) == FALSE,
+    ifelse((as.Date(utils::tail(data_set[[i]]$MESS_DATUM, n = 1)) >= as.Date(end_date)) == FALSE |
+           (as.Date(utils::head(data_set[[i]]$MESS_DATUM, n = 1)) <= as.Date(start_date)) == FALSE,
            i, NA))))
 
   data_set <- data_set[-c(delete_staions)]
@@ -144,8 +144,8 @@ get_DWDdata <- function(
   stations_loc <- stations_loc[-c(delete_staions),]
 
   delete_staions2 <- as.vector(stats::na.omit(sapply(1:length(data_set), function(i)
-    ifelse(is.na(utils::head(dplyr::filter(data_set[[i]], lubridate::year("MESS_DATUM")>=lubridate::year(start_date))[var_name], n = 1)) == TRUE |
-             is.na(utils::tail(dplyr::filter(data_set[[i]], lubridate::year("MESS_DATUM")>=lubridate::year(start_date))[var_name], n = 1)) == TRUE,
+    ifelse(is.na(utils::head(dplyr::filter(data_set[[i]], lubridate::year(MESS_DATUM) >= lubridate::year(start_date))[var_name], n = 1)) == TRUE |
+           is.na(utils::tail(dplyr::filter(data_set[[i]], lubridate::year(MESS_DATUM) >= lubridate::year(start_date))[var_name], n = 1)) == TRUE,
            i, NA)
   )))
 
@@ -182,125 +182,6 @@ get_DWDdata <- function(
                            "stations_name", "region", "time_lag", "variable", "period", "file", "distance", "url")
 
   data_list <- list(dataset, stations_loc)
-
-  return(data_list)
-}
-
-#' @describeIn get_DWDdata solar radiation specific function
-get_Solardata <- function(
-  lat_center,
-  lon_center,
-  radius_km,
-  time_lag = "hourly",
-  meteo_var = "solar",
-  start_date,
-  end_date,
-  data_dir = tempdir()
-){
-  ###### # stations
-  stations_loc <- rdwd::nearbyStations(lat = lat_center, lon = lon_center,
-                                       radius = radius_km,
-                                       res = time_lag,
-                                       var = meteo_var,
-                                       mindate=as.Date(start_date))
-
-  stations_loc <- stations_loc[-1,]
-
-  links_data <- rdwd::selectDWD(stations_loc$Stationsname,
-                                outvec =  TRUE,
-                                res = time_lag,
-                                var = meteo_var)
-  # download file:
-  data_name <- rdwd::dataDWD(links_data, dir = data_dir, read = FALSE)
-  # read and plot file:
-  data_set <- rdwd::readDWD(data_name, varnames = FALSE, tz = "UTC") #, format = NULL
-
-  ts <- seq(as.POSIXct(start_date, tz = "UTC"), as.POSIXct(end_date, tz = "UTC"),
-            by = "hour") #"30 min"
-
-  ts <- data.frame("MESS_DATUM_WOZ" = ts[1:(length(ts)-1)])
-
-  for(i in 1:length(data_set)) {
-    data_set[[i]]$MESS_DATUM_WOZ <- lubridate::ymd_hm(data_set[[i]]$MESS_DATUM_WOZ)
-  }
-
-  data_set_period <- lapply(1:length(data_set), function(i) dplyr::left_join(ts, data_set[[i]],
-                                                                             by = "MESS_DATUM_WOZ"))
-
-  names(stations_loc) <- c("stations_id", "start_date", "end_date", "station_height", "latitude", "longitude",
-                           "stations_name", "region", "time_lag", "variable", "period", "file", "distance", "url")
-
-  data_list <- list(data_set_period, stations_loc)
-
-  return(data_list)
-}
-
-#' @describeIn get_DWDdata daily soil moisture specific function
-get_SMCdata <- function(
-  lat_center,
-  lon_center,
-  radius_km,
-  time_lag = "daily",
-  meteo_var = "soil",
-  start_date,
-  end_date,
-  data_dir = tempdir()
-
-){
-  dbase <- "ftp://opendata.dwd.de/climate_environment/CDC/derived_germany"
-  soilIndex <- rdwd::indexFTP(folder="soil/daily", base = dbase)
-  soilIndex <- rdwd::createIndex(soilIndex, base = dbase)
-
-  #  "res" and "var" are inverted in the derived_germany folder!
-  colnames(soilIndex)[1:2] <- c("var", "res")
-  # non-standard column order, but rdwd should always use names (not positions)
-
-  stations_loc <- rdwd::nearbyStations(lat_center, lon_center,
-                                       radius = radius_km,
-                                       res = c("hourly"),
-                                       per = c("historical"),
-                                       var = c("moisture"),
-                                       mindate=as.Date(start_date))
-
-  stations_loc <- stations_loc[-1,]
-
-  # select URL:
-  links_data <- rdwd::selectDWD(unique(stations_loc$Stationsname),
-                                var = meteo_var,
-                                res = time_lag,
-                                per = c("historical"),
-                                outvec =  TRUE,
-                                base = dbase,
-                                findex = soilIndex)
-
-  data_name <- rdwd::dataDWD(unique(links_data), base = dbase, dir = tempdir(), read = FALSE)
-
-  # download and read files:
-  data_set <- rdwd::dataDWD(unique(links_data), base = dbase)
-
-  stations_loc <- stations_loc[!duplicated(stations_loc$Stations_id), ]
-
-  delete_staions <- as.vector(stats::na.omit(sapply(1:length(data_set), function(i)
-    ifelse((as.Date(utils::tail(data_set[[i]]$Datum, n=1)) >= as.Date(end_date)) == FALSE |
-             (as.Date(utils::head(data_set[[i]]$Datum, n=1)) <= as.Date(start_date)) == FALSE,
-           i, NA))))
-
-  data_set <- data_set[-c(delete_staions)]
-
-  stations_loc <- stations_loc[-c(delete_staions),]
-
-  ts <- seq(as.POSIXct(start_date, tz = "UTC"), as.POSIXct(end_date, tz = "UTC"),
-            by = "day") #"30 min"
-
-  ts <- data.frame("Datum" = ts[1:(length(ts)-1)])
-
-  data_set_period <- lapply(1:length(data_set), function(i) dplyr::left_join(ts, data_set[[i]],
-                                                                             by = "Datum"))
-
-  names(stations_loc) <- c("stations_id", "start_date", "end_date", "station_height", "latitude", "longitude",
-                           "stations_name", "region", "time_lag", "variable", "period", "file", "distance", "url")
-
-  data_list <- list(data_set_period, stations_loc)
 
   return(data_list)
 }
