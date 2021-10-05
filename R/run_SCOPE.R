@@ -242,10 +242,9 @@ run_SCOPE <- function(
     # filter values for a simple timestamp
     csv_inputs <- dplyr::filter(csv_inputs, csv_inputs[,col_split] %in% split_values)
     readr::write_csv(csv_inputs, file = paste0(SCOPE_dir, "input/dataset for_verification/", deparse(quote(csv_inputs)), ".csv"))
-
   }else{
     # extract the average (i.e. sum) of all the layers in the raster
-    readr::write_csv(csv_inputs, file = paste0(SCOPE_dir, "input/dataset for_verification/", deparse(substitute(csv_inputs)), ".csv"))
+    readr::write_csv(csv_inputs, file = paste0(SCOPE_dir, "input/dataset for_verification/", deparse(quote(csv_inputs)), ".csv"))
   }
   ###### set model inputs and settings
   ### model inputs to run with - name
