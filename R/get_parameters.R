@@ -78,8 +78,7 @@ get_parameters <- function(
                              pattern= "filenames",
                              full.names = TRUE)
 
-  Inputs_list <- lapply(1:length(Inputs_files), function(i) invisible(readr::read_csv(Inputs_files[i],
-                                                                            col_names = FALSE)))
+  Inputs_list <- lapply(1:length(Inputs_files), function(i) invisible(readr::read_csv(Inputs_files[i], col_names = FALSE)))
 
   inputs_true <- data.frame(
     "col" = c(4,7, 35,36,37,38,39,40,41,42,43,44,45,
@@ -90,7 +89,7 @@ get_parameters <- function(
                 LAI, hc, LIDFa, LIDFb,  z, Ca,  Vcmax25, BallBerrySlope))
 
   Inputs <- lapply(1:length(Inputs_files),
-                   function(i) Inputs_list[[i]][dplyr::filter(inputs_true, "check" == TRUE)$col,])
+                   function(i) Inputs_list[[i]][dplyr::filter(inputs_true, check == TRUE)$col,])
 
   # SCOPE model constants
   Constants_files <- list.files(paste0(path=grep(Simulation_Name,
@@ -118,7 +117,7 @@ get_parameters <- function(
                 startDOY, endDOY, LAT, LON, timezn,  tts_c, tto_c, psi_c))
 
   Constants <- lapply(1:length(Constants_files),
-                      function(i) Constants_list[[i]][dplyr::filter(constants_true, "check" == TRUE)$col,])
+                      function(i) Constants_list[[i]][dplyr::filter(constants_true, check == TRUE)$col,])
 
   # SCOPE model settings
   Settings_files <- list.files(paste0(path=grep(Simulation_Name,
@@ -136,10 +135,10 @@ get_parameters <- function(
     "col" = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17),
     "check" = c(lite, calc_fluor, calc_planck, calc_xanthophyllabs, soilspectrum,
                 Fluorescence_model, applTcorr, verify, saveCSV, mSCOPE, simulation, calc_directional,
-                calc_vert_profiles, soil_heat_method, calc_rss_rbs, MoninObukhov, save_spectral))
+                calc_vert_profiles, soil_heat_method, calc_rss_rbs, MoninObukhov, save_spectral, calc_ebal))
 
   Settings <- lapply(1:length(Settings_files),
-                     function(i) Settings_list[[i]][dplyr::filter(settings_true, "check" == TRUE)$col,])
+                     function(i) Settings_list[[i]][dplyr::filter(settings_true, check == TRUE)$col,])
 
   SCOPE_parameters <- NULL
 

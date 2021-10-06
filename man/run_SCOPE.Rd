@@ -139,6 +139,7 @@ run_SCOPE(
   soil_heat_method = 2,
   calc_rss_rbs = 0,
   MoninObukhov = 1,
+  calc_ebal = 1,
   set_parameter_filenames = set_parameter_filenames,
   split = FALSE,
   col_split = "",
