@@ -132,10 +132,10 @@ get_parameters <- function(
   Settings_list <- lapply(1:length(Settings_files), function(i) invisible(readr::read_csv(Settings_files[i],
                                                                                 col_names = FALSE)))
   settings_true <- data.frame(
-    "col" = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17),
+    "col" = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17), #,18
     "check" = c(lite, calc_fluor, calc_planck, calc_xanthophyllabs, soilspectrum,
                 Fluorescence_model, applTcorr, verify, saveCSV, mSCOPE, simulation, calc_directional,
-                calc_vert_profiles, soil_heat_method, calc_rss_rbs, MoninObukhov, save_spectral, calc_ebal))
+                calc_vert_profiles, soil_heat_method, calc_rss_rbs, MoninObukhov, save_spectral)) #, calc_ebal
 
   Settings <- lapply(1:length(Settings_files),
                      function(i) Settings_list[[i]][dplyr::filter(settings_true, check == TRUE)$col,])

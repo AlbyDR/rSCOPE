@@ -6,15 +6,17 @@
 #' @examples
 #' Examples of uses of the function
 #'
-#' model_outputs()
+#' data(outputs_var)
 #'
+#' outputs_var %>%
+#' filter(simulation_file == "fluxes.csv")
 #'
 #' @export
 model_outputs <- function(outputs = TRUE
 ){
-  outputs <- data("outputs_var")
+  data("outputs_var")
 
-  outputs_table <- tibble::tibble(outputs)
+  outputs <- tibble::tibble(outputs_var)
 
-  return(outputs_table)
+  return(outputs)
 }

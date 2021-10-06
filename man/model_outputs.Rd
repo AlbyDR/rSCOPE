@@ -18,7 +18,9 @@ This is a function to get the model output available (variables and settings to 
 \examples{
 Examples of uses of the function
 
-model_outputs()
+data(outputs_var)
 
+outputs_var \%>\%
+filter(simulation_file == "fluxes.csv")
 
 }
