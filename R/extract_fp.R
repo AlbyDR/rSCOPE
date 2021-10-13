@@ -180,7 +180,7 @@ extract_fp <- function(
 ){ # If TRUE crop and reproject for the footprint resolution/extent
   ### make the footprint calculation according to Kormann and Meixner (2001) from FREddyPro
   footprint <- FREddyPro::exportFootprintPoints(FREddyPro::Calculate(fetch = fetch,
-                                                                     height = zm,
+                                                                     height = zm-zd,
                                                                      grid = grid,
                                                                      speed = speed,
                                                                      direction = direction,
