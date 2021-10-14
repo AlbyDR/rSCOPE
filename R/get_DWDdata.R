@@ -12,8 +12,11 @@
 #' @param meteo_var type of meteorological data target in the DWD ftp (see option below)
 #' @param var_name variable name target in the the downloaded meteo_var file (see option below)
 #' @param by_lag to create a timestamp, default "hour",
-#' @param data_dir where to save the downlaod data, default temporary.
-#' @return a list with: 1- a data.frame with the selected variable per station id for the set timestamp, and 2- a data.frame with metadata information, such as stations_id, start_date, end_date, station_height, latitude, longitude, stations_name, region, time_lag, variable, period, file, distance, url.
+#' @param
+#' @return a list with: 1- a data.frame with the selected variable per station id for the set timestamp, and
+#'                      2- a data.frame with metadata information, such as stations_id, start_date, end_date,
+#'                      station_height, latitude, longitude, stations_name, region, time_lag, variable, period, file, distance, url.
+#' data_dir where to save the downlaod data, default temporary. dir.create(file.path(tempdir(), "DWDdir"), showWarnings = FALSE)
 #' @examples
 #' ##### meteo_var options
 #' # "precipitation"       "air_temperature"     "extreme_temperature"   "extreme_wind"
@@ -110,11 +113,11 @@ get_DWDdata <- function(
   start_date,
   end_date,
   var_name,
-  by_lag = "hour",
-  data_dir = tempdir()
+  by_lag = "hour"
 ){
   ###### # stations
-  stations_loc <- rdwd::nearbyStations(lat = lat_center, lon = lon_center,
+  stations_loc <- rdwd::nearbyStations(lat = lat_center,
+                                       lon = lon_center,
                                        radius = radius_km,
                                        res = time_lag,
                                        per = period,
@@ -128,8 +131,13 @@ get_DWDdata <- function(
                                 res = time_lag,
                                 per = period,
                                 var = meteo_var)
+
+  DWDdir <- file.path(tempdir(), "DWDdir")
+
+  dir.create(DWDdir)
+
   # download file:
-  data_name <- rdwd::dataDWD(links_data, dir = data_dir, read = FALSE)
+  data_name <- rdwd::dataDWD(links_data, dir = DWDdir, read = FALSE)
 
   # read and plot file:
   data_set <- rdwd::readDWD(data_name, varnames = FALSE, tz = "UTC") #, format = NULL
@@ -158,10 +166,10 @@ get_DWDdata <- function(
   }
 
   # #####
-  ts <- seq(as.POSIXct(start_date, tz = "UTC"), as.POSIXct(end_date, tz = "UTC"),
+  ts <- seq(as.POSIXct(as.Date(start_date), tz = "UTC"), as.POSIXct(as.Date(end_date)+1, tz = "UTC"),
             by = by_lag) #"30 min"
 
-  ts <- data.frame("MESS_DATUM" = ts[1:(length(ts)-1)])
+  ts <- data.frame("MESS_DATUM" = ts[24:(length(ts)-2)])
 
   data_set_period_NA <- sapply(1:length(data_set), function(i) dplyr::left_join(ts, data_set[[i]],
                                                                                 by = "MESS_DATUM")[var_name])
@@ -175,6 +183,8 @@ get_DWDdata <- function(
   }
 
   colnames(data_set_period) <- sapply(1:length(data_set_period), function(i) paste0("ID_", data_set[[i]][1,1]))
+
+  unlink(DWDdir, recursive = TRUE)
 
   dataset <- data.frame("timestamp" = ts, data_set_period)
 
