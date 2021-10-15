@@ -178,6 +178,17 @@ extract_fp <- function(
   extract_list = FALSE,   # If TRUE extract also the values at tower location, full fp extent and buffer
   buffer = 500            # buffer diameter to be extracted, default 500m
 ){ # If TRUE crop and reproject for the footprint resolution/extent
+
+  #creates a new filepath for temp directory
+  Rasterdir <- file.path(tempdir(), "Rasterdir")
+  dir.create(Rasterdir)
+
+    #sets temp directory
+  sink("NUL")
+  tmpdir_raster <- raster::rasterOptions()$tmpdir
+  raster::rasterOptions(tmpdir = Rasterdir)
+  sink()
+
   ### make the footprint calculation according to Kormann and Meixner (2001) from FREddyPro
   footprint <- FREddyPro::exportFootprintPoints(FREddyPro::Calculate(fetch = fetch,
                                                                      height = zm-zd,
@@ -187,7 +198,8 @@ extract_fp <- function(
                                                                      uStar = uStar,
                                                                      zol = (zm-zd)/L,
                                                                      sigmaV = sqrt(v_var)),
-                                                xcoord = lon, ycoord = lat)
+                                                                     xcoord = lon,
+                                                                     ycoord = lat)
   # convert to raster (utm)
   footprint <- raster::rasterFromXYZ(xyz = footprint,
                                      crs = "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
@@ -195,6 +207,8 @@ extract_fp <- function(
   # reduce the FP area to the elipse that the probability is equal to the input FP_probs (suggested 0.99)
   footprint[which(raster::values(footprint) <= raster::quantile(footprint, probs = FP_probs, names = FALSE))] <- NA
   raster::values(footprint) <- raster::values(footprint)*1/sum(raster::values(footprint), na.rm = TRUE)
+
+  options(warn = -1)
 
   ### if is a multilayer raster fix in time
   if(fix_time == TRUE){
@@ -277,6 +291,12 @@ extract_fp <- function(
       }
     }
   }
+
+  options(warn = 1)
+
+  unlink(Rasterdir, recursive = TRUE)
+  raster::rasterOptions(tmpdir = tmpdir_raster)
+
   ### return a data frame (or vector) with the FP average extracted from the tower location
   return(input_FP)
 }

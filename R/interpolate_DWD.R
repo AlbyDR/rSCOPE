@@ -29,6 +29,10 @@ interpolate_DWD <- function(
   crop_extent,
   vgm_model = "Sph"
   ){
+
+  sink("NUL")
+  options(warn = -1)
+
   stations <- matrix(cbind(stations_DWD$longitude,
                            stations_DWD$latitude),
                      length(stations_DWD$longitude))
@@ -52,9 +56,15 @@ interpolate_DWD <- function(
 
   vgm_var = gstat::variogram(object = var_DWD ~ 1, data = stations)# set a variogram
   fit_var = gstat::fit.variogram(object = vgm_var, gstat::vgm(vgm_model)) # fit a variogram
+
+  fit_var$range[fit_var$range < 0] <- abs(fit_var$range)[2]
+
   krg_var = gstat::krige(var_DWD ~ 1, locations = stations, newdata = st_grid, model = fit_var, debug.level = 0)
   krg_var = raster::raster(krg_var)
   krg_var = raster::crop(x = krg_var, crop_extent)
+
+  options(warn = 1)
+  sink()
 
   return(krg_var)
 }
