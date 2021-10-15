@@ -27,8 +27,12 @@ interpolate_DWD <- function(
   res_utm,
   radius_km,
   crop_extent,
-  vgm_model = "Sph"
+  vgm_model = c("Exp", "Mat", "Gau", "Sph")
   ){
+
+  Rasterdir <- file.path(tempdir(), "Rasterdir")
+
+  dir.create(Rasterdir)
 
   sink("NUL")
   tmpdir_raster <- raster::rasterOptions()$tmpdir
