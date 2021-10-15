@@ -31,6 +31,8 @@ interpolate_DWD <- function(
   ){
 
   sink("NUL")
+  tmpdir_raster <- raster::rasterOptions()$tmpdir
+  raster::rasterOptions(tmpdir = Rasterdir)
   options(warn = -1)
 
   stations <- matrix(cbind(stations_DWD$longitude,
@@ -64,6 +66,9 @@ interpolate_DWD <- function(
   krg_var = raster::crop(x = krg_var, crop_extent)
 
   options(warn = 1)
+
+  unlink(Rasterdir, recursive = TRUE)
+  raster::rasterOptions(tmpdir = tmpdir_raster)
   sink()
 
   return(krg_var)
