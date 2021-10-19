@@ -10,7 +10,7 @@ interpolate_DWD(
   res_utm,
   radius_km,
   crop_extent,
-  vgm_model = "Sph"
+  vgm_model = c("Exp", "Mat", "Gau", "Sph")
 )
 }
 \arguments{

@@ -14,8 +14,7 @@ get_DWDdata(
   start_date,
   end_date,
   var_name,
-  by_lag = "hour",
-  data_dir = dir.create(file.path(tempdir(), "DWDdir"), showWarnings = FALSE)
+  by_lag = "hour"
 )
 }
 \arguments{
@@ -38,11 +37,12 @@ get_DWDdata(
 \item{var_name}{variable name target in the the downloaded meteo_var file (see option below)}
 
 \item{by_lag}{to create a timestamp, default "hour",}
-
-\item{data_dir}{where to save the downlaod data, default temporary. dir.create(file.path(tempdir(), "DWDdir"), showWarnings = FALSE)}
 }
 \value{
-a list with: 1- a data.frame with the selected variable per station id for the set timestamp, and 2- a data.frame with metadata information, such as stations_id, start_date, end_date, station_height, latitude, longitude, stations_name, region, time_lag, variable, period, file, distance, url.
+a list with: 1- a data.frame with the selected variable per station id for the set timestamp, and
+                     2- a data.frame with metadata information, such as stations_id, start_date, end_date,
+                     station_height, latitude, longitude, stations_name, region, time_lag, variable, period, file, distance, url.
+data_dir where to save the downlaod data, default temporary. dir.create(file.path(tempdir(), "DWDdir"), showWarnings = FALSE)
 }
 \description{
 This is a function to download DWD data based on a buffer distance.
