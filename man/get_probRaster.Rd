@@ -59,29 +59,31 @@ It extracts the FP average (i.e. sum of probability) for inputs in a multilayer 
 in a data frame (timestamp, output values per "pixel number").
 }
 \examples{
-## Examples of uses of the extract_fp function
-# fix time and no resample (as before) - Atlas Maps
-# fix time resample from a map of entire the Berlin - Atlas Maps
-# varying in time using a multilayer raster stacked hourly (if daily change timestamp from ymd_hms to ymd)
-# varying in time using a data frame with all pixels values and timestamp together - modeled ET
+## Examples of uses of the extract_fp probability raster
+ROTH_Map <- raster::crop(atlas_maps[[1]], extent(c(385566.5-2000, 385566.5+2000, 5813229-2000, 5813229+2000)))
 
-n = 8760
-# ROTH location, fix in time and no resample. The raster has to be cropped and reproject to FP before
+FP_ROTH_prob <- pbapply::pblapply(4501:4524, function(i)
+  get_probRaster(
+    fetch = 1000, zm = 39.75, grid = 200, lon = 385566.5, lat = 5813229,
+    speed = zoo::na.approx(EC_DWD_ROTH$ws)[i], # FP input variables
+    direction = zoo::na.approx(EC_DWD_ROTH$wd)[i],
+    uStar = zoo::na.approx(EC_DWD_ROTH$u.)[i],
+    zd = zoo::na.approx(EC_DWD_ROTH$zd)[i],
+    v_var = zoo::na.approx(EC_DWD_ROTH$v_var)[i],
+    L = zoo::na.approx(EC_DWD_ROTH$L)[i],
+    timestamp = EC_DWD_ROTH$timestamp[i],
+    FP_probs = 0.90,# FP probability
+    prob = F,
+    exctract = FALSE, # default - raster info
+    input_raster = ROTH_Map # raster model inputs (utm)
+  ))
 
-FP_ROTH_extrated <- data.frame(t(sapply(1:n, function(i) extract_fp(
-  fetch = 1000, zm = 40 , grid = 200, lon = 385566.5, lat = 5813229, # constants
-  speed = na.approx(EC_ROTH$ws)[i], # FP input variables
-  direction = na.approx(EC_ROTH$wd)[i],
-  uStar = na.approx(EC_ROTH$u.)[i],
-  zd = na.approx(EC_ROTH$zd)[i],
-  v_var = na.approx(EC_ROTH$v_var)[i],
-  L = na.approx(EC_ROTH$L)[i],
-  timestamp = EC_ROTH$timestamp[i],
-  FP_probs = 0.9925, # FP probability
-  fix_time = TRUE, # default
-  resample_raster = FALSE,
-  input_raster = atlas_maps_ROTH_FP # raster model inputs - utm
-)) ))
+FP_ROTH_prob <- stack(FP_ROTH_prob)
 
+plot(FP_ROTH_prob[[c(1,6,12,18)]])
+
+for (i in 1:24) {
+  print(sum(raster::values(FP_ROTH_prob[[i]]), na.rm = TRUE))
+}
 
 }
