@@ -17,7 +17,10 @@ get_probRaster(
   lon,
   lat,
   timestamp,
-  FP_probs = 0.99
+  FP_probs = 0.99,
+  input_raster,
+  prob = TRUE,
+  exctract = FALSE
 )
 }
 \arguments{

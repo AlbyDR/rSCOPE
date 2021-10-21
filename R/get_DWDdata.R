@@ -12,7 +12,6 @@
 #' @param meteo_var type of meteorological data target in the DWD ftp (see option below)
 #' @param var_name variable name target in the the downloaded meteo_var file (see option below)
 #' @param by_lag to create a timestamp, default "hour",
-#' @param
 #' @return a list with: 1- a data.frame with the selected variable per station id for the set timestamp, and
 #'                      2- a data.frame with metadata information, such as stations_id, start_date, end_date,
 #'                      station_height, latitude, longitude, stations_name, region, time_lag, variable, period, file, distance, url.
