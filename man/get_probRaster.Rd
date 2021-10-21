@@ -20,7 +20,7 @@ get_probRaster(
   FP_probs = 0.99,
   input_raster,
   prob = TRUE,
-  exctract = FALSE
+  resample = TRUE
 )
 }
 \arguments{
@@ -49,6 +49,10 @@ get_probRaster(
 \item{timestamp}{datetime (Lubridate)}
 
 \item{FP_probs}{probability to keep as the main ellipse area - suggested 0.99}
+
+\item{prob}{default TRUE, if FALSE return the full fooprint}
+
+\item{resample}{default TRUE, if FALSE return the grid from the FP function}
 }
 \value{
 It returns a data frame (or vector) with the FP average extracted from the tower's location.
@@ -73,8 +77,8 @@ FP_ROTH_prob <- pbapply::pblapply(4501:4524, function(i)
     L = zoo::na.approx(EC_DWD_ROTH$L)[i],
     timestamp = EC_DWD_ROTH$timestamp[i],
     FP_probs = 0.90,# FP probability
-    prob = F,
-    exctract = FALSE, # default - raster info
+    prob = TRUE,
+    resample = TRUE,
     input_raster = ROTH_Map # raster model inputs (utm)
   ))
 

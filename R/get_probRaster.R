@@ -16,6 +16,8 @@
 #' @param lat latitude of the EC tower
 #' @param timestamp datetime (Lubridate)
 #' @param FP_probs probability to keep as the main ellipse area - suggested 0.99
+#' @param prob default TRUE, if FALSE return the full fooprint
+#' @param resample default TRUE, if FALSE return the grid from the FP function
 #' @return It returns a data frame (or vector) with the FP average extracted from the tower's location.
 #' @examples
 #' ## Examples of uses of the extract_fp probability raster
@@ -32,8 +34,8 @@
 #'     L = zoo::na.approx(EC_DWD_ROTH$L)[i],
 #'     timestamp = EC_DWD_ROTH$timestamp[i],
 #'     FP_probs = 0.90,# FP probability
-#'     prob = F,
-#'     exctract = FALSE, # default - raster info
+#'     prob = TRUE,
+#'     resample = TRUE,
 #'     input_raster = ROTH_Map # raster model inputs (utm)
 #'   ))
 #'
@@ -55,7 +57,7 @@ get_probRaster <- function(
   FP_probs = 0.99,
   input_raster,
   prob = TRUE,
-  exctract = FALSE
+  resample = TRUE
 ){ # If TRUE crop and reproject for the footprint resolution/extent
   #creates a new filepath for temp directory
   Rasterdir <- file.path(tempdir(), "Rasterdir")
@@ -76,39 +78,37 @@ get_probRaster <- function(
                                                                      uStar = uStar,
                                                                      zol = (zm-zd)/L,
                                                                      sigmaV = sqrt(v_var)),
-                                                xcoord = lon,
-                                                ycoord = lat)
+                                                                     xcoord = lon,
+                                                                     ycoord = lat)
   # convert to raster (utm)
   if(prob == TRUE){
+
+     if(resample == TRUE){
+
     footprint <- raster::rasterFromXYZ(xyz = footprint,
                                        crs = "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
-  # reduce the FP area to the elipse that the probability is equal to the input FP_probs (suggested 0.99)
-    if(exctract == TRUE){
-  footprint <- raster::crop(footprint, raster::extent(input_raster))
-  #input_raster <- raster::disaggregate(input_raster, dim(footprint)[1]/2)
-  footprint <- raster::projectRaster(footprint, input_raster)
-  # multiply the FP probability to all layers in the raster
-  footprint <- input_raster*footprint
-  # extract the average (i.e. sum) of all the layers in the raster
-  footprint <- c(timestamp, footprint)
-  names(footprint) <- c("timestamp", names(footprint))
+
+    footprint <- raster::crop(footprint, raster::extent(input_raster))
+    footprint <- raster::projectRaster(footprint, input_raster)
+
+    footprint[which(raster::values(footprint) <= raster::quantile(footprint, probs = FP_probs, names = FALSE))] <- NA
+    raster::values(footprint) <- raster::values(footprint)*1/sum(raster::values(footprint), na.rm = TRUE)
+
     }else{
 
-  footprint <- raster::crop(footprint, raster::extent(input_raster))
-  #input_raster <- raster::disaggregate(input_raster, dim(footprint)[1]/2)
-  footprint <- raster::projectRaster(footprint, input_raster)
+    footprint <- raster::rasterFromXYZ(xyz = footprint,
+                                       crs = "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 
-  footprint[which(raster::values(footprint) <= raster::quantile(footprint, probs = FP_probs, names = FALSE))] <- NA
-  raster::values(footprint) <- raster::values(footprint)*1/sum(raster::values(footprint), na.rm = TRUE)
+    footprint[which(raster::values(footprint) <= raster::quantile(footprint, probs = FP_probs, names = FALSE))] <- NA
+    raster::values(footprint) <- raster::values(footprint)*1/sum(raster::values(footprint), na.rm = TRUE)
     }
 
   }else{
-    footprint <- raster::rasterFromXYZ(xyz = footprint,
-                                       crs = "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
-    footprint[which(raster::values(footprint) <= raster::quantile(footprint, probs = FP_probs, names = FALSE))] <- NA
-    raster::values(footprint) <- raster::values(footprint)*1/sum(raster::values(footprint), na.rm = TRUE)
-  }
 
+  footprint <- raster::rasterFromXYZ(xyz = footprint,
+                                       crs = "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
+
+  }
   ### return a data frame (or vector) with the FP average extracted from the tower location
   return(footprint)
 
