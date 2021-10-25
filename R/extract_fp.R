@@ -213,25 +213,25 @@ extract_fp <- function(
   ### if is a multilayer raster fix in time
   if(fix_time == TRUE){
     ## if the input_raster need to be cropped and resampled
-    if(resample_raster == TRUE){
-      input_raster <- raster::crop(input_raster, raster::extent(footprint))
-      #input_raster <- raster::disaggregate(input_raster, dim(footprint)[1]/2)
-      input_raster <- raster::projectRaster(input_raster, footprint)
-      # multiply the FP probability to all layers in the raster
-      input_fp_raster <- input_raster*footprint
-      # extract the average (i.e. sum) of all the layers in the raster
-      input_FP <- sapply(1:raster::nlayers(input_raster), function(i) sum(raster::values(input_fp_raster[[i]]), na.rm = TRUE))
-      input_FP <- c(timestamp, input_FP)
-      names(input_FP) <- c("timestamp", names(input_raster))
-      ## if the input_raster is already in the same resolution and extent of the FP
-    }else{
-      # multiply the FP probability to all layers in the raster
-      input_fp_raster <- input_raster*footprint
-      # extract the average (i.e. sum) of all the layers in the raster
-      input_FP <- sapply(1:raster::nlayers(input_raster), function(i) sum(raster::values(input_fp_raster[[i]]), na.rm = TRUE))
-      input_FP <- c(timestamp, input_FP)
-      names(input_FP) <- c("timestamp", names(input_raster))
-    }
+              if(resample_raster == TRUE){
+                input_raster <- raster::crop(input_raster, raster::extent(footprint))
+                #input_raster <- raster::disaggregate(input_raster, dim(footprint)[1]/2)
+                input_raster <- raster::projectRaster(input_raster, footprint)
+                # multiply the FP probability to all layers in the raster
+                input_fp_raster <- input_raster*footprint
+                # extract the average (i.e. sum) of all the layers in the raster
+                input_FP <- sapply(1:raster::nlayers(input_raster), function(i) sum(raster::values(input_fp_raster[[i]]), na.rm = TRUE))
+                input_FP <- c(timestamp, input_FP)
+                names(input_FP) <- c("timestamp", names(input_raster))
+                ## if the input_raster is already in the same resolution and extent of the FP
+              }else{
+                # multiply the FP probability to all layers in the raster
+                input_fp_raster <- input_raster*footprint
+                # extract the average (i.e. sum) of all the layers in the raster
+                input_FP <- sapply(1:raster::nlayers(input_raster), function(i) sum(raster::values(input_fp_raster[[i]]), na.rm = TRUE))
+                input_FP <- c(timestamp, input_FP)
+                names(input_FP) <- c("timestamp", names(input_raster))
+              }
     ### if is a multilayer raster or a data frame of pixel values that vary on time (timestamp)
   }else{
     ## if the input is data frame of pixel values rather than stack/brick raster
@@ -254,42 +254,63 @@ extract_fp <- function(
       # extract the average (i.e. sum) of all the layers in the raster
       input_FP <- sum(raster::values(input_fp_raster), na.rm = TRUE)
       ## extract the point location, FP extent and buffer as a list with FP
-      if(extract_list == TRUE){
-        # extract the average (i.e. sum) of all the layers in the raster
-        input_FP <- sum(raster::values(input_fp_raster), na.rm = TRUE)
-        # create a list with the extracted at the point location, FP extent and 500 buffer
-        input_point <- raster::extract(input_raster, data.frame(x = lon, y = lat))
-        input_extent <- raster::extract(input_raster, raster::extent(footprint), weights = TRUE, fun=mean, na.rm = TRUE)
-        input_buffer <- raster::extract(input_raster, data.frame(x = lon, y = lat), buffer = 500,
-                                        fun = mean, na.rm = TRUE, df = TRUE)[1,2]
-        input_FP <- list(input_FP, input_point, input_extent, input_buffer)
-      }else{
-        # extract the average (i.e. sum) of all the layers in the raster
-        input_FP <- sum(raster::values(input_fp_raster), na.rm = TRUE)
-      }
+          if(extract_list == TRUE){
+            # extract the average (i.e. sum) of all the layers in the raster
+            input_FP <- sum(raster::values(input_fp_raster), na.rm = TRUE)
+            # create a list with the extracted at the point location, FP extent and 500 buffer
+            input_point <- raster::extract(input_raster, data.frame(x = lon, y = lat))
+            input_extent <- raster::extract(input_raster, raster::extent(footprint), weights = TRUE, fun=mean, na.rm = TRUE)
+            input_buffer <- raster::extract(input_raster, data.frame(x = lon, y = lat), buffer = 500,
+                                            fun = mean, na.rm = TRUE, df = TRUE)[1,2]
+            input_FP <- list(input_FP, input_point, input_extent, input_buffer)
+          }else{
+            # extract the average (i.e. sum) of all the layers in the raster
+            input_FP <- sum(raster::values(input_fp_raster), na.rm = TRUE)
+          }
       ## if the time-series is already a raster
     }else{
-      # resample the template raster to the FP
-      input_raster <- raster::crop(input_raster, raster::extent(footprint))
-      input_raster <- raster::disaggregate(input_raster, dim(footprint)[1]/2)
-      input_raster <- raster::projectRaster(input_raster, footprint)
-      # extract the average (i.e. sum) of all the layers in the raster
-      input_fp_raster <- input_raster*footprint
-      ## extract the point location, FP extent and buffer as a list with FP
-      if(extract_list == TRUE){
+        if(resample_raster == TRUE){
+        # resample the template raster to the FP
+        input_raster <- raster::crop(input_raster, raster::extent(footprint))
+        input_raster <- raster::disaggregate(input_raster, dim(footprint)[1]/2)
+        input_raster <- raster::projectRaster(input_raster, footprint)
         # extract the average (i.e. sum) of all the layers in the raster
-        input_FP <- sum(raster::values(input_fp_raster), na.rm = TRUE)
-        # create a list with the extracted at the point location, FP extent and 500 buffer
-        input_point <- raster::extract(input_raster, data.frame(x = lon, y = lat))
-        input_extent <- raster::extract(input_raster, raster::extent(footprint), weights = TRUE, fun=mean, na.rm = TRUE)
-        input_buffer <- raster::extract(input_raster, data.frame(x = lon, y = lat), buffer = 500,
-                                        fun = mean, na.rm = TRUE, df = TRUE)[1,2]
-        input_FP <- list(input_FP, input_point, input_extent, input_buffer)
-      }else{
-        # create a list with the extracted at the point location, FP extent and 500 buffer
-        input_FP <- sum(raster::values(input_fp_raster), na.rm = TRUE)
-      }
+        input_fp_raster <- input_raster*footprint
+      ## extract the point location, FP extent and buffer as a list with FP
+                 if(extract_list == TRUE){
+                  # extract the average (i.e. sum) of all the layers in the raster
+                  input_FP <- sum(raster::values(input_fp_raster), na.rm = TRUE)
+                  # create a list with the extracted at the point location, FP extent and 500 buffer
+                  input_point <- raster::extract(input_raster, data.frame(x = lon, y = lat))
+                  input_extent <- raster::extract(input_raster, raster::extent(footprint), weights = TRUE, fun=mean, na.rm = TRUE)
+                  input_buffer <- raster::extract(input_raster, data.frame(x = lon, y = lat), buffer = 500,
+                                                  fun = mean, na.rm = TRUE, df = TRUE)[1,2]
+                  input_FP <- list(input_FP, input_point, input_extent, input_buffer)
+                 }else{
+                  # create a list with the extracted at the point location, FP extent and 500 buffer
+                  input_FP <- sum(raster::values(input_fp_raster), na.rm = TRUE)
+                 }
+       }else{
+
+        input_fp_raster <- input_raster*footprint
+
+                    if(extract_list == TRUE){
+                      # extract the average (i.e. sum) of all the layers in the raster
+                      input_FP <- sum(raster::values(input_fp_raster), na.rm = TRUE)
+                      # create a list with the extracted at the point location, FP extent and 500 buffer
+                      input_point <- raster::extract(input_raster, data.frame(x = lon, y = lat))
+                      input_extent <- raster::extract(input_raster, raster::extent(footprint), weights = TRUE, fun=mean, na.rm = TRUE)
+                      input_buffer <- raster::extract(input_raster, data.frame(x = lon, y = lat), buffer = 500,
+                                                      fun = mean, na.rm = TRUE, df = TRUE)[1,2]
+                      input_FP <- list(input_FP, input_point, input_extent, input_buffer)
+                    }else{
+                      # create a list with the extracted at the point location, FP extent and 500 buffer
+                      input_FP <- sum(raster::values(input_fp_raster), na.rm = TRUE)
+                    }
+       }
+
     }
+
   }
 
   options(warn = 1)
