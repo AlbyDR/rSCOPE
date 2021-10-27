@@ -58,6 +58,8 @@ get_Solardata <- function(
   ts <- seq(as.POSIXct(start_date, tz = "UTC"), as.POSIXct(end_date, tz = "UTC"),
             by = "hour") #"30 min"
 
+  ts <- force_tz(ts, tz = "UTC")
+
   ts <- data.frame("MESS_DATUM_WOZ" = ts[1:(length(ts)-1)])
 
   for(i in 1:length(data_set)) {

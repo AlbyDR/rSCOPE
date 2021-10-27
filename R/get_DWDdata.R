@@ -168,6 +168,8 @@ get_DWDdata <- function(
   ts <- seq(as.POSIXct(as.Date(start_date), tz = "UTC"), as.POSIXct(as.Date(end_date)+1, tz = "UTC"),
             by = by_lag) #"30 min"
 
+  ts <- force_tz(ts, tz = "UTC")
+
   ts <- data.frame("MESS_DATUM" = ts[24:(length(ts)-2)])
 
   data_set_period_NA <- sapply(1:length(data_set), function(i) dplyr::left_join(ts, data_set[[i]],

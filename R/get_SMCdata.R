@@ -83,6 +83,8 @@ get_SMCdata <- function(
   ts <- seq(as.POSIXct(start_date, tz = "UTC"), as.POSIXct(end_date, tz = "UTC"),
             by = "day") #"30 min"
 
+  ts <- force_tz(ts, tz = "UTC")
+
   ts <- data.frame("Datum" = ts[1:(length(ts)-1)])
 
   data_set_period <- lapply(1:length(data_set), function(i) dplyr::left_join(ts, data_set[[i]],
