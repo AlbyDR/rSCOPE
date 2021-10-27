@@ -89,6 +89,19 @@
 #' solar_radiation[[1]][[1]];
 #' summary(solar_radiation[[1]][[1]]);
 #'
+#' library(tidyverse)
+#'
+#' solar_radiation[[1]][[1]] %>%
+#'   mutate(Rli = zoo::na.approx(round((ATMO_LBERG*100*100)/(60*60),2)),
+#'          diffuse_radiation = zoo::na.approx(round((FD_LBERG*100*100)/(60*60),2)),
+#'          Rin = zoo::na.approx(round((FG_LBERG*100*100)/(60*60),2)),
+#'          sun_duration = zoo::na.approx(SD_LBERG),
+#'          sun_zenith_angle = zoo::na.approx(ZENIT),
+#'          # timestamp = MESS_DATUM_WOZ,
+#'          timestamp = with_tz(force_tz(MESS_DATUM_WOZ, "CEST"), tz = "UTC")
+#'   ) %>%
+#'   select(timestamp,  Rin, Rli, diffuse_radiation, sun_duration, sun_zenith_angle, MESS_DATUM) -> solar_radiation_3987
+#'
 #' ##########
 #' SMC_daily <- get_SMCdata(lat_center = 52.4537,
 #'                          lon_center = 13.3017,
