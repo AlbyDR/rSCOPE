@@ -4,7 +4,24 @@
 \alias{get_accuracy}
 \title{get_accuracy}
 \usage{
-get_accuracy(obs_vec, predictions, metric_function)
+get_accuracy(
+  obs_vec,
+  predictions,
+  metric_function,
+  Filter = FALSE,
+  timestamp,
+  month_start = 1,
+  month_end = 12,
+  period = c("day", "dawn_dusk", "night"),
+  nu_interations,
+  interations = 101,
+  dryhours_vec,
+  dry_hours = 0,
+  neg_vec,
+  neg_null = 0,
+  lat = 52.46,
+  lon = 13.32
+)
 }
 \arguments{
 \item{obs_vec}{for get_accuracy a vector of observed values in the same timestamp as the predictions.}
