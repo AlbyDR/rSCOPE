@@ -19,6 +19,8 @@ get_accuracy(
   dry_hours = 0,
   neg_vec,
   neg_null = 0,
+  pred_neg = 0,
+  neg_values = NA,
   lat = 52.46,
   lon = 13.32
 )

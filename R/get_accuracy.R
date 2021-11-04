@@ -47,6 +47,8 @@ get_accuracy <- function(
   dry_hours = 0,
   neg_vec,
   neg_null = 0,
+  pred_neg = 0,
+  neg_values = NA,
   lat = 52.46,
   lon = 13.32
 ){
@@ -59,6 +61,10 @@ get_accuracy <- function(
     interations_NA <- tibble::tibble(data.frame(sapply(1:length(predictions), function(i) ifelse(nu_interations[i] <= interations, 1, NA))))
 
     predictions_df <- interations_NA*predictions_df
+
+    negative_NA <- tibble::tibble(data.frame(sapply(1:length(predictions), function(i) ifelse(predictions_df[i] >= pred_neg, 1, neg_values))))
+
+    predictions_df <- negative_NA*predictions_df
 
     night <- suncalc::getSunlightTimes(date = lubridate::date(timestamp), lat = lat, lon = lon, tz = "UTC")
 
