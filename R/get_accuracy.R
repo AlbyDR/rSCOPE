@@ -128,14 +128,13 @@ get_accuracy <- function(
     colnames(metrics_table) <- Predictions_metrics[[1]]$.metric
     rownames(metrics_table) <- names(predictions)
 
-    metrics_table$rBias <- sapply(1:length(predictions), function(i) sum(predictions_df[i+1]-obs_vec, na.rm = T)/
-                                    sum(obs_vec, na.rm = T))
+    metrics_table$rBias <- sapply(1:length(predictions), function(i) sum(predictions_df[i+2]-obs_vec, na.rm = T)/
+                                    sum(obs_vec[!is.na(predictions_df[i+2])==T], na.rm = T))
 
     names(predictions_df) <- c("timestamp", "obs_vec", names(predictions))
 
     metrics_table$n_obs <- sapply(1:length(predictions), function(i) length(filter(predictions_df, !is.na(obs_vec) &
                                                                                                    !is.na(predictions_df[i+2]))[,i+2]))
-
 
   }else{
 
