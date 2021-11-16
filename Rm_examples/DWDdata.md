@@ -31,11 +31,11 @@ tower_points_utm <- spTransform(tower_points, "+proj=utm +zone=33 +datum=WGS84 +
 ################################################################################################ 
 #### Metadata
 ################################################################################################ 
-#### “precipitation” ; “air\_temperature” ; “extreme\_temperature” ; “extreme\_wind” ; “solar” ; “wind” ; “wind\_test” ; “soil” ; “more\_precip” ; “weather\_phenomena” ; “soil\_temperature” ; “water\_equiv” ; “cloud\_type” ; “cloudiness” ; “dew\_point” ; “moisture” ; “pressure” ; “sun” ; “visibility” ; “wind\_synop”
+#### “precipitation” ; “air_temperature” ; “extreme_temperature” ; “extreme_wind” ; “solar” ; “wind” ; “wind_test” ; “soil” ; “more_precip” ; “weather_phenomena” ; “soil_temperature” ; “water_equiv” ; “cloud_type” ; “cloudiness” ; “dew_point” ; “moisture” ; “pressure” ; “sun” ; “visibility” ; “wind_synop”
 ################################################################################################ 
-#### meteo\_var = air\_temperature
-#### var\_name = TT\_TU, air temperature at 2m height (Ta) 
-#### var\_name = RF\_TU, relative humidity at 2m height (RH)
+#### meteo_var = "air_temperature"
+#### var_name = "TT_TU", air temperature at 2m height (Ta) 
+#### var_name = "RF_TU", relative humidity at 2m height (RH)
 ################################################################################################ 
 
 ``` r
