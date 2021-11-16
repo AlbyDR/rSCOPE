@@ -21,19 +21,20 @@
 #' @export
 prec_window <- function(prec_vec,
                         max_dry_hours,
-                        timestamp
+                        timestamp,
+                        value_on = 0.01
 ){
   window.prec <- NULL
 
   for (i in 1:max_dry_hours) {
     window.prec[[i]] <- data.frame(
-      dplyr::arrange(data.frame(row = unique(c(which(prec_vec > 0.01) + i))), row),
+      dplyr::arrange(data.frame(row = unique(c(which(prec_vec >= value_on) + i))), row),
       hour = i )
     colnames(window.prec[[i]]) <- c("row", paste("hour", i, sep = ""))
   }
 
   window.prec.0 <- data.frame(
-    dplyr::arrange(data.frame(row = unique(c(which(prec_vec > 0.01) + 0))), row),
+    dplyr::arrange(data.frame(row = unique(c(which(prec_vec >= value_on) + 0))), row),
     "hour0" = 0)
 
   row_timestamp <- data.frame(timestamp = timestamp)
