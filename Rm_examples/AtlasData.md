@@ -16,13 +16,9 @@ invisible(lapply(c("rSCOPE", "leaflet", "raster", "sf", "tidyverse","lubridate" 
 Green.blocks <- get_fisbroker_map(url = "https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_05_09_gruenvol2010")
 ```
 
-    ## [1] "https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_05_09_gruenvol2010?service=wfs&version=2.0.0&request=GetFeature&srsName=EPSG%3A25833&TYPENAMES=s_05_09_gruenvol2010"
-
 ``` r
 Green.street <- get_fisbroker_map(url = "https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/wfs_05_09_gruenvol2010_str")
 ```
-
-    ## [1] "https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/wfs_05_09_gruenvol2010_str?service=wfs&version=2.0.0&request=GetFeature&srsName=EPSG%3A25833&TYPENAMES=wfs_05_09_gruenvol2010_str"
 
 #### plot it
 
