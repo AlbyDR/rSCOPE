@@ -8,25 +8,9 @@ invisible(lapply(c("rSCOPE", "leaflet", "raster", "sf", "tidyverse","lubridate" 
                  library, character.only = T, quietly = TRUE, warn.conflicts = F))
 ```
 
-    ## Linking to GEOS 3.9.0, GDAL 3.2.1, PROJ 7.2.1
-
-    ## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
-
-    ## v ggplot2 3.3.5     v purrr   0.3.4
-    ## v tibble  3.1.2     v dplyr   1.0.7
-    ## v tidyr   1.1.3     v stringr 1.4.0
-    ## v readr   1.4.0     v forcats 0.5.1
-
-    ## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-    ## x tidyr::extract() masks raster::extract()
-    ## x dplyr::filter()  masks stats::filter()
-    ## x dplyr::lag()     masks stats::lag()
-    ## x dplyr::select()  masks raster::select()
 
 ### Polygons from BERLIN ENVIRONMENT ATLAS
-
 ############################################################# 
-
 ``` r
 # Impreviousmap <- get_fisbroker_map(url = "https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/sach_nutz2015_nutzsa")
 Green.blocks <- get_fisbroker_map(url = "https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_05_09_gruenvol2010")
@@ -57,14 +41,9 @@ ggplot(Green.blocks) +
 plot(extent(381673,388803,5811189,5821467), col=NA)
 plot(Green.blocks["vegproz"], add = T, border = "transparent", col=rev(terrain.colors(10))) # street and water NA
 ```
-
-    ## Warning in plot.sf(Green.blocks["vegproz"], add = T, border = "transparent", :
-    ## col is not of length 1 or nrow(x): colors will be recycled; use pal to specify a
-    ## color palette
-
 ![](AtlasData_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-no streets
+it has no streets
 
 #### Vegetation height - combine Block and Streets
 
@@ -93,11 +72,6 @@ plot(extent(381673,388803,5811189,5821467), col=NA)
 plot(veg_height["veg_height"], add = T, border = "transparent", 
      col=rev(terrain.colors(10))) # street and water NA
 ```
-
-    ## Warning in plot.sf(veg_height["veg_height"], add = T, border = "transparent", :
-    ## col is not of length 1 or nrow(x): colors will be recycled; use pal to specify a
-    ## color palette
-
 ![](AtlasData_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 #### plot nicely!
