@@ -14,17 +14,13 @@ load(url("https://userpage.fu-berlin.de/soga/300/30100_data_sets/berlin_district
 Berlin_border_longlat <- st_transform(berlin.sf, crs = "+proj=longlat +datum=WGS84")
 Berlin_border_utm <- sf::st_transform(berlin.sf, "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs")
 ```
-
-mask based on Berlin border
-
+#### Mask based on Berlin border
 ``` r
 Berlin_buffer_utm = sf::st_buffer(Berlin_border_utm, 1000)
 ```
 
 #################################################################################### 
-
-Tower points
-
+#### Tower points
 ``` r
 tower_points <- matrix(c(13.315827, 13.32785, 52.457232, 52.51228), ncol = 2)
 tower_points <- data.frame(x = tower_points[,1], y = tower_points[,2])
@@ -32,18 +28,14 @@ coordinates(tower_points) = c("x", "y")
 proj4string(tower_points) <- CRS("+proj=longlat +datum=WGS84")
 tower_points_utm <- spTransform(tower_points, "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs")
 ```
-
 ################################################################################################ 
-
 #### Metadata
-
 ################################################################################################ 
 #### “precipitation” ; “air\_temperature” ; “extreme\_temperature” ; “extreme\_wind” ; “solar” ; “wind” ; “wind\_test” ; “soil” ; “more\_precip” ; “weather\_phenomena” ; “soil\_temperature” ; “water\_equiv” ; “cloud\_type” ; “cloudiness” ; “dew\_point” ; “moisture” ; “pressure” ; “sun” ; “visibility” ; “wind\_synop”
 ################################################################################################ 
-
 #### meteo\_var = air\_temperature
-#### var\_name = TT\_TU, air temperature at 2m height (Ta) var\_name =
-#### RF\_TU, relative humidity at 2m height (RH)
+#### var\_name = TT\_TU, air temperature at 2m height (Ta) 
+#### var\_name = RF\_TU, relative humidity at 2m height (RH)
 ################################################################################################ 
 
 ``` r
