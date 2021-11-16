@@ -7,22 +7,6 @@ AlbyDR
 invisible(lapply(c("rSCOPE", "leaflet", "raster", "sf", "tidyverse","lubridate" ,"ggplot2", "ggspatial"), 
                  library, character.only = T, quietly = TRUE, warn.conflicts = F))
 ```
-
-    ## Linking to GEOS 3.9.0, GDAL 3.2.1, PROJ 7.2.1
-
-    ## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
-
-    ## v ggplot2 3.3.5     v purrr   0.3.4
-    ## v tibble  3.1.2     v dplyr   1.0.7
-    ## v tidyr   1.1.3     v stringr 1.4.0
-    ## v readr   1.4.0     v forcats 0.5.1
-
-    ## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-    ## x tidyr::extract() masks raster::extract()
-    ## x dplyr::filter()  masks stats::filter()
-    ## x dplyr::lag()     masks stats::lag()
-    ## x dplyr::select()  masks raster::select()
-
 ################################################################################################## 
 
 ``` r
@@ -39,7 +23,7 @@ Berlin_buffer_utm = sf::st_buffer(Berlin_border_utm, 1000)
 
 #################################################################################### 
 
-tower points
+Tower points
 
 ``` r
 tower_points <- matrix(c(13.315827, 13.32785, 52.457232, 52.51228), ncol = 2)
@@ -51,29 +35,16 @@ tower_points_utm <- spTransform(tower_points, "+proj=utm +zone=33 +datum=WGS84 +
 
 ################################################################################################ 
 
-##### Metadata
+#### Metadata
 
 ################################################################################################ 
-
-### “precipitation” ; “air\_temperature” ; “extreme\_temperature” ; “extreme\_wind”
-
-### “solar” ; “wind” ; “wind\_test” ; “soil”
-
-### “more\_precip” ; “weather\_phenomena” ; “soil\_temperature” ; “water\_equiv”
-
-### “cloud\_type” ; “cloudiness” ; “dew\_point” ; “moisture”
-
-### “pressure” ; “sun” ; “visibility” ; “wind\_synop”
-
+#### “precipitation” ; “air\_temperature” ; “extreme\_temperature” ; “extreme\_wind” ; “solar” ; “wind” ; “wind\_test” ; “soil” ; “more\_precip” ; “weather\_phenomena” ; “soil\_temperature” ; “water\_equiv” ; “cloud\_type” ; “cloudiness” ; “dew\_point” ; “moisture” ; “pressure” ; “sun” ; “visibility” ; “wind\_synop”
 ################################################################################################ 
 
+#### meteo\_var = air\_temperature
+#### var\_name = TT\_TU, air temperature at 2m height (Ta) var\_name =
+#### RF\_TU, relative humidity at 2m height (RH)
 ################################################################################################ 
-
-### meteo\_var = air\_temperature
-
-var\_name = TT\_TU, air temperature at 2m height (Ta) var\_name =
-RF\_TU, relative humidity at 2m height (RH)
-\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
 
 ``` r
 Air_temp <- get_DWDdata(
@@ -88,20 +59,7 @@ Air_temp <- get_DWDdata(
   var_name = "TT_TU")
 ```
 
-    ## Selecting stations...
-
-    ## Preparing URLs...
-
-    ## rmarkdown::render -> knitr::knit -> call_block -> block_exec -> eng_r -> in_dir -> evaluate -> get_DWDdata -> rdwd::dataDWD -> dirDWD: adding to directory 'C:/Users/Alby Rocha/AppData/Local/Temp/RtmpiatQDZ/DWDdir'
-
-    ## rmarkdown::render -> knitr::knit -> call_block -> block_exec -> eng_r -> in_dir -> evaluate -> get_DWDdata -> rdwd::dataDWD -> newFilename: creating 19 files:
-    ## C:/Users/ALBYRO~1/AppData/Local/Temp/RtmpiatQDZ/DWDdir/hourly_air_temperature_historical_stundenwerte_TU_00403_20020101_20201231_hist.zip
-    ## C:/Users/ALBYRO~1/AppData/Local/Temp/RtmpiatQDZ/DWDdir/hourly_air_temperature_historical_stundenwerte_TU_00433_19510101_20201231_hist.zip
-    ##   (and 17 more)
-
-    ## Reading 19 files with readDWD.data() and fread=TRUE ...
-
-data
+#### Data
 
 ``` r
 summary(Air_temp[[1]])
@@ -136,46 +94,29 @@ summary(Air_temp[[1]])
     ##  3rd Qu.:16.70   3rd Qu.:16.80   3rd Qu.:16.80   3rd Qu.:16.18  
     ##  Max.   :37.10   Max.   :36.60   Max.   :37.70   Max.   :36.90
 
-metadata
+#### Metadata
 
 ``` r
 Air_temp[[2]][,c(1,2,3,4,5,6,7,8,13)]
 ```
 
-    ##       stations_id start_date   end_date station_height latitude longitude
-    ## 6716          403 2002-01-01 2021-05-31             51  52.4537   13.3017
-    ## 7385          433 1951-01-01 2021-05-31             48  52.4675   13.4021
-    ## 7274          430 1986-01-01 2021-05-05             36  52.5644   13.3088
-    ## 7135          427 1973-01-01 2021-05-31             46  52.3807   13.5306
-    ## 61582        3987 1893-01-01 2021-05-31             81  52.3813   13.0622
-    ## 6999          420 2007-08-01 2021-05-31             60  52.5447   13.5598
-    ## 6581          400 1991-01-01 2021-05-31             60  52.6309   13.5022
-    ## 88176        5825 2004-05-01 2021-05-31             40  52.6198   12.7867
-    ## 4902          303 1993-08-19 2021-05-31             55  52.0613   13.4997
-    ## 96393        7389 2006-12-01 2021-05-31             82  52.7461   13.8427
-    ## 52574        3376 1991-01-01 2021-05-31             63  52.5176   14.1232
-    ## 87083        5745 1981-01-01 2021-05-31             51  52.9664   13.3268
-    ## 43767        2856 2004-07-01 2021-05-31             91  51.9173   13.0878
-    ## 46206        3015 1951-01-01 2021-05-31             98  52.2085   14.1180
-    ## 92145        6265 2004-05-01 2021-05-31             36  52.3613   12.3867
-    ## 84236        5546 1986-07-01 2021-05-31            187  52.1207   12.4585
-    ##            stations_name      region  distance
-    ## 6716  Berlin-Dahlem (FU)      Berlin  0.000000
-    ## 7385    Berlin-Tempelhof      Berlin  6.973214
-    ## 7274        Berlin-Tegel      Berlin 12.318653
-    ## 7135  Berlin Brandenburg Brandenburg 17.517807
-    ## 61582            Potsdam Brandenburg 18.128080
-    ## 6999      Berlin-Marzahn      Berlin 20.190057
-    ## 6581         Berlin-Buch      Berlin 23.918265
-    ## 88176              Berge Brandenburg 39.425453
-    ## 4902              Baruth Brandenburg 45.666673
-    ## 96393         Heckelberg Brandenburg 48.909075
-    ## 52574        Muencheberg Brandenburg 56.078100
-    ## 87083          Zehdenick Brandenburg 57.034709
-    ## 43767     Langenlipsdorf Brandenburg 61.401637
-    ## 46206         Lindenberg Brandenburg 61.806610
-    ## 92145         Wusterwitz Brandenburg 62.911860
-    ## 84236         Wiesenburg Brandenburg 68.266749
+    ##       stations_id start_date   end_date station_height latitude longitude  stations_name      region      distance
+    ## 6716          403 2002-01-01 2021-05-31             51  52.4537   13.3017  Berlin-Dahlem (FU) Berlin      0.000000
+    ## 7385          433 1951-01-01 2021-05-31             48  52.4675   13.4021  Berlin-Tempelhof   Berlin      6.973214
+    ## 7274          430 1986-01-01 2021-05-05             36  52.5644   13.3088  Berlin-Tegel       Berlin      12.318653
+    ## 7135          427 1973-01-01 2021-05-31             46  52.3807   13.5306  Berlin Brandenburg Brandenburg 17.517807
+    ## 61582        3987 1893-01-01 2021-05-31             81  52.3813   13.0622  Potsdam            Brandenburg 18.128080
+    ## 6999          420 2007-08-01 2021-05-31             60  52.5447   13.5598  Berlin-Marzahn     Berlin      20.190057
+    ## 6581          400 1991-01-01 2021-05-31             60  52.6309   13.5022  Berlin-Buch        Berlin      23.918265
+    ## 88176        5825 2004-05-01 2021-05-31             40  52.6198   12.7867  Berge              Brandenburg 39.425453
+    ## 4902          303 1993-08-19 2021-05-31             55  52.0613   13.4997  Baruth             Brandenburg 45.666673
+    ## 96393        7389 2006-12-01 2021-05-31             82  52.7461   13.8427  Heckelberg         Brandenburg 48.909075
+    ## 52574        3376 1991-01-01 2021-05-31             63  52.5176   14.1232  Muencheberg        Brandenburg 56.078100
+    ## 87083        5745 1981-01-01 2021-05-31             51  52.9664   13.3268  Zehdenick          Brandenburg 57.034709
+    ## 43767        2856 2004-07-01 2021-05-31             91  51.9173   13.0878  Langenlipsdorf     Brandenburg 61.401637
+    ## 46206        3015 1951-01-01 2021-05-31             98  52.2085   14.1180  Lindenberg         Brandenburg 61.806610
+    ## 92145        6265 2004-05-01 2021-05-31             36  52.3613   12.3867  Wusterwitz         Brandenburg 62.911860
+    ## 84236        5546 1986-07-01 2021-05-31            187  52.1207   12.4585  Wiesenburg         Brandenburg 68.266749
 
 ``` r
 leaflet() %>% addTiles() %>%
@@ -186,7 +127,7 @@ leaflet() %>% addTiles() %>%
 
 ![](DWDdata_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
-air temperature
+#### Air temperature
 
 ``` r
 length(Air_temp[[1]]$MESS_DATUM)
