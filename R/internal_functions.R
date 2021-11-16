@@ -137,3 +137,13 @@ resample_to_footprint = function(r, footprint_rast) {
   r_new = raster::projectRaster(r_new, footprint_rast) # reproject
   return(r_new)
 }
+
+set_names <- function(x, colnames) {
+  # Do some checks
+  if (! "data.frame" %in% class(x)) stop("Argument must be a data.frame")
+  if (class(colnames) != "character") stop("New names must be character")
+  if (length(names(x)) != length(colnames)) stop("Invalid nr. of new names")
+  # Actual replacement of  column names
+  names(x) <- colnames
+  return(x)
+}
