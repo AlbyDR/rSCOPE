@@ -4,7 +4,7 @@
 \alias{prec_window}
 \title{prec_window}
 \usage{
-prec_window(prec_vec, max_dry_hours, timestamp)
+prec_window(prec_vec, max_dry_hours, timestamp, value_on = 0.01)
 }
 \arguments{
 \item{prec_vec}{a vector with the volume of precipitation.}

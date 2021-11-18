@@ -71,14 +71,14 @@ get_accuracy <- function(
     night$time <- timestamp
     night$sun <- NULL
     night$sun[night$time>night$nadir] <- "Night" ##seting
-    night$sun[night$time>night$night & hour(night$time)<hour(night$nadir)] <- "Night"    #rising
+    night$sun[night$time>night$night & lubridate::hour(night$time)<lubridate::hour(night$nadir)] <- "Night"    #rising
     night$sun[night$time>night$nightEnd & night$time<night$nauticalDawn] <- "Dawn" #Morn.Astr.night
     night$sun[night$time>night$nauticalDawn & night$time<night$dawn] <- "Dawn"     #Morn.Nau.ECsun
     night$sun[night$time>night$dawn & night$time<night$sunrise] <- "Dawn"          #Morn.Civil.ECsun
     night$sun[night$time>night$sunrise & night$time<night$goldenHourEnd] <- "Goldenhour.M"
     night$sun[night$time>night$goldenHourEnd & night$time<night$solarNoon] <- "Rising"
-    night$sun[night$time>night$goldenHourEnd & hour(night$time)<(hour(night$solarNoon)-2)] <- "Rising"
-    night$sun[hour(night$time)==round(hour(night$solarNoon))] <- "Noon"
+    night$sun[night$time>night$goldenHourEnd & lubridate::hour(night$time)<(lubridate::hour(night$solarNoon)-2)] <- "Rising"
+    night$sun[lubridate::hour(night$time)==round(lubridate::hour(night$solarNoon))] <- "Noon"
     night$sun[night$time>night$solarNoon & night$time<night$goldenHour] <- "Setting"
     night$sun[night$time>night$goldenHour & night$time<night$sunset] <- "Goldenhour.A"
     night$sun[night$time>night$sunset & night$time<night$dusk] <- "Dusk"        #Even.Civil.ECsun
