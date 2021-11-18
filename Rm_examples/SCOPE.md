@@ -221,9 +221,9 @@ vars_comb <- expand_grid("LAI"=c("LAI_buffer", "LAI_mean", "LAI_max", NA),
                          "hc"=c("hc_vc", NA), 
                          "SMC"=c("SMC20_DWD", "SMC60_DWD", NA))
 ```
-  ## for (i in 1:length(vars_comb$LAI)) {
-  ##   run_SCOPE(csv_inputs = ROTH_SCOPEinput,
-  ##             Simulation_Name = paste0("ROTH_DWD", i),
+    ##   for (i in 1:length(vars_comb$LAI)) {
+    ##     run_SCOPE(csv_inputs = ROTH_SCOPEinput,
+    ##               Simulation_Name = paste0("ROTH_DWD", i),
   ##             split = FALSE,
   ##             # variable names
   ##             t = "t", # time BerkeleyJulianDate
