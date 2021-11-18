@@ -223,33 +223,32 @@ vars_comb <- expand_grid("LAI"=c("LAI_buffer", "LAI_mean", "LAI_max", NA),
 ```
 ``` r
 for (i in 1:length(vars_comb$LAI)) {
-run_SCOPE(csv_inputs = ROTH_SCOPEinput,
-Simulation_Name = paste0("ROTH_DWD", i),
-split = FALSE,
-# variable names
-t = "t", # time BerkeleyJulianDate
-Rin = "Rin_DWD", Rli = "Rli_DWD",
-p = "p_DWD", Ta = "Ta_DWD", RH = "RH_DWD", ea = NA,
-u = "ws_DWD", tts = "tts", tto = NA, psi = NA, # geometry
-# variables calibration
-LAI = vars_comb$LAI[i],
-hc = vars_comb$hc[i], # vegetation height
-SMC = vars_comb$SMC[i], # soil
-# constants values
-LAI_c = 3, # default
-hc_c = 2,  # default
-SMC_c = 25, # default
-z_c =  40, #56,
-startDOY = 20181201, endDOY =20210130,  # timestamp period
-LAT = 52.45, LON = 13.32, timezn = 0,   # Lat/long and time zone
-# settings values (non-default)
-lite = 1,
-soilspectrum = 0,
-soil_file = "soilROTH.txt", # soil spectrum file (need to be save at 
-D:\SCOPE-master\input\soil_spectra)
-applTcorr = 1,
-soil_heat_method = 1,
-MoninObukhov = 1)
+   run_SCOPE(csv_inputs = ROTH_SCOPEinput,
+            Simulation_Name = paste0("ROTH_DWD", i),
+            split = FALSE,
+  # variable names
+            t = "t", # time BerkeleyJulianDate
+            Rin = "Rin_DWD", Rli = "Rli_DWD",
+            p = "p_DWD", Ta = "Ta_DWD", RH = "RH_DWD", ea = NA,
+            u = "ws_DWD", tts = "tts", tto = NA, psi = NA, # geometry
+  # variables calibration
+            LAI = vars_comb$LAI[i],
+            hc = vars_comb$hc[i], # vegetation height
+             SMC = vars_comb$SMC[i], # soil
+  # constants values
+            LAI_c = 3, # default
+            hc_c = 2,  # default
+            SMC_c = 25, # default
+            z_c =  40, #56,
+            startDOY = 20181201, endDOY =20210130,  # timestamp period
+            LAT = 52.45, LON = 13.32, timezn = 0,   # Lat/long and time zone
+  # settings values (non-default)
+            lite = 1,
+            soilspectrum = 0,
+            soil_file = "soilROTH.txt", # soil spectrum file (save at D:\SCOPE-master\input\soil_spectra)
+            applTcorr = 1,
+            soil_heat_method = 1,
+            MoninObukhov = 1)
 progress(i, length(vars_comb$LAI), progress.bar = TRUE, init = T)
 Sys.sleep(360) #time delay in seconds
 if (i == length(vars_comb$LAI)) message("Done!")
