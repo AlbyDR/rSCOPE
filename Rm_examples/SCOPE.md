@@ -37,7 +37,7 @@ print(model_inputs(SCOPE_dir = "D:/SCOPE-master/")[[1]], n = 20) #32
     ## 20 Cant            <NA>          
     ## # ... with 12 more rows
 
-#### model constants (name\_c)
+#### model constants (name_c)
 
 ``` r
 print(model_inputs(SCOPE_dir = "D:/SCOPE-master/")[[2]], n = 20) #89
@@ -68,7 +68,7 @@ print(model_inputs(SCOPE_dir = "D:/SCOPE-master/")[[2]], n = 20) #89
     ## 20 Rdparam           0.015
     ## # ... with 69 more rows
 
-#### model settings (name\_c)
+#### model settings (name_c)
 
 ``` r
 print(model_inputs(SCOPE_dir = "D:/SCOPE-master/")[[3]], n = 18) #18
@@ -221,19 +221,38 @@ vars_comb <- expand_grid("LAI"=c("LAI_buffer", "LAI_mean", "LAI_max", NA),
                          "hc"=c("hc_vc", NA), 
                          "SMC"=c("SMC20_DWD", "SMC60_DWD", NA))
 ```
-for (i in
-1:length(vars\_comb$LAI)) {  run\_SCOPE(csv\_inputs = ROTH\_SCOPEinput,  Simulation\_Name = paste0("ROTH\_DWD", i),  split = FALSE,  \# variable names  t = "t", \# time BerkeleyJulianDate  Rin = "Rin\_DWD", Rli = "Rli\_DWD",  p = "p\_DWD", Ta = "Ta\_DWD", RH = "RH\_DWD", ea = NA,  u = "ws\_DWD", tts = "tts", tto = NA, psi = NA, \# geometry  \# variables calibration  LAI = vars\_comb$LAI\[i\],
-hc =
-vars\_comb$hc\[i\], \# vegetation height  SMC = vars\_comb$SMC\[i\], \#
-soil \# constants values LAI\_c = 3, \# default hc\_c = 2, \# default
-SMC\_c = 25, \# default z\_c = 40, \#56, startDOY = 20181201, endDOY
-=20210130, \# timestamp period LAT = 52.45, LON = 13.32, timezn = 0, \#
-Lat/long and time zone \# settings values (non-default) lite = 1,
-soilspectrum = 0, soil\_file = “soilROTH.txt”, \# soil spectrum file
-(need to be save at D:-master\_spectra) applTcorr = 1,
-soil\_heat\_method = 1, MoninObukhov = 1) progress(i,
-length(vars\_comb$LAI), progress.bar = TRUE, init = T)  Sys.sleep(360) \#time delay in seconds  if (i == length(vars\_comb$LAI))
-message(“Done!”) }
+  ## for (i in 1:length(vars_comb$LAI)) {
+  ##   run_SCOPE(csv_inputs = ROTH_SCOPEinput,
+  ##             Simulation_Name = paste0("ROTH_DWD", i),
+  ##             split = FALSE,
+  ##             # variable names
+  ##             t = "t", # time BerkeleyJulianDate
+  ##             Rin = "Rin_DWD", Rli = "Rli_DWD",
+  ##             p = "p_DWD", Ta = "Ta_DWD", RH = "RH_DWD", ea = NA,
+  ##             u = "ws_DWD", tts = "tts", tto = NA, psi = NA, # geometry
+  ##             # variables calibration
+  ##             LAI = vars_comb$LAI[i],
+  ##             hc = vars_comb$hc[i], # vegetation height
+  ##             SMC = vars_comb$SMC[i], # soil
+  ##             # constants values
+  ##             LAI_c = 3, # default
+  ##             hc_c = 2,  # default
+  ##             SMC_c = 25, # default
+  ##             z_c =  40, #56,
+  ##             startDOY = 20181201, endDOY =20210130,  # timestamp period
+  ##             LAT = 52.45, LON = 13.32, timezn = 0,   # Lat/long and time zone
+  ##             # settings values (non-default)
+  ##             lite = 1,
+  ##             soilspectrum = 0,
+  ##             soil_file = "soilROTH.txt", # soil spectrum file (need to be save at 
+  ## D:\SCOPE-master\input\soil_spectra)
+  ##             applTcorr = 1,
+  ##             soil_heat_method = 1,
+  ##             MoninObukhov = 1)
+  ##   progress(i, length(vars_comb$LAI), progress.bar = TRUE, init = T)
+  ##   Sys.sleep(360) #time delay in seconds
+  ##   if (i == length(vars_comb$LAI)) message("Done!")
+  ## }
 
 ``` r
 SCOPE_parameters_ROTH <- get_parameters(
