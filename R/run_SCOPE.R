@@ -230,7 +230,7 @@ run_SCOPE <- function(
   lite = 1, verify = 0, saveCSV = 1, mSCOPE = 0, simulation = 1, save_spectral = 0,
   calc_fluor = 0, calc_planck = 0,  calc_xanthophyllabs = 0, Fluorescence_model = 0,
   calc_directional = 0, calc_vert_profiles = 0,
-  soilspectrum = 1, applTcorr = 1, soil_heat_method = 2, calc_rss_rbs = 0,  MoninObukhov = 1, calc_ebal = 1,
+  soilspectrum = 1, applTcorr = 1, soil_heat_method = 2, calc_rss_rbs = 0,  MoninObukhov = 1, #calc_ebal = 1,
   ### model run file instructions
   set_parameter_filenames = set_parameter_filenames,
   split = FALSE,
@@ -283,7 +283,7 @@ run_SCOPE <- function(
   setoptions_d[,1] <- c(lite, calc_fluor, calc_planck, calc_xanthophyllabs, soilspectrum,
                         Fluorescence_model, applTcorr, verify, saveCSV, mSCOPE, simulation,
                         calc_directional, calc_vert_profiles, soil_heat_method, calc_rss_rbs,
-                        MoninObukhov, save_spectral, calc_ebal)
+                        MoninObukhov, save_spectral) #, calc_ebal
 
   readr::write_csv(setoptions_d, file = paste0(SCOPE_dir, "input/", deparse(quote(setoptions)),
                                                ".csv"), col_names = FALSE)
