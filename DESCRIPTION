@@ -27,4 +27,5 @@ Imports:
     stringr,
     tibble,
     zoo,
-    yardstick
+    yardstick,
+    suncalc
