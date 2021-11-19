@@ -26,4 +26,5 @@ Imports:
     sp,
     stringr,
     tibble,
-    zoo
+    zoo,
+    yardstick
