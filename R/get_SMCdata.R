@@ -78,7 +78,7 @@ get_SMCdata <- function(
 
   data_set <- data_set[-c(delete_staions)]
 
-  stations_loc <- stations_loc[-c(delete_staions),]
+  stations_loc <- stations_loc[-c(delete_staions),c(1,2,3,5,6,7,8,13)]
 
   ts <- seq(as.POSIXct(start_date, tz = "UTC"), as.POSIXct(end_date, tz = "UTC"),
             by = "day") #"30 min"
@@ -87,13 +87,14 @@ get_SMCdata <- function(
 
   ts <- data.frame("Datum" = ts[1:(length(ts)-1)])
 
-  data_set_period <- lapply(1:length(data_set), function(i) dplyr::left_join(ts, data_set[[i]],
+  data_set_period <- lapply(1:length(data_set), function(i) dplyr::left_join(ts, data_set[[i]][,-33],
                                                                              by = "Datum"))
 
-  names(stations_loc) <- c("stations_id", "start_date", "end_date", "station_height", "latitude", "longitude",
-                           "stations_name", "region", "time_lag", "variable", "period", "file", "distance", "url")
+  names(stations_loc) <- c("stations_id", "start_date", "end_date", "latitude", "longitude",
+                           "stations_name", "region",  "distance")
+  #"station_height","time_lag", "variable", "period", "file", "url",
 
-  data_list <- list(data_set_period, stations_loc)
+  data_list <- list(data_set_period, stations_loc, unique(links_data))
 
   return(data_list)
 }
