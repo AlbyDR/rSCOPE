@@ -28,4 +28,5 @@ Imports:
     tibble,
     zoo,
     yardstick,
-    suncalc
+    suncalc,
+    gtools

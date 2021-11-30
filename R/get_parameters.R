@@ -40,6 +40,7 @@
 get_parameters <- function(
   SCOPE_dir = "D:/SCOPE-master/",
   Simulation_Name,
+  per_simulation = TRUE,
   # show model inputs - variables
   soil_file = TRUE, name_simulation = TRUE, t = FALSE, Rin = FALSE, Rli = FALSE, p = FALSE,
   Ta = FALSE, u = FALSE, ea = FALSE, RH = FALSE, tts = FALSE, tto = FALSE, psi = FALSE,
@@ -69,7 +70,7 @@ get_parameters <- function(
   soilspectrum = TRUE, applTcorr = TRUE, soil_heat_method = TRUE, calc_rss_rbs = TRUE,  MoninObukhov = TRUE
 ){
   # SCOPE model inputs - variables
-  Inputs_files <- list.files(paste0(path=grep(Simulation_Name,
+  Outputs_files_str <- list.files(paste0(path=grep(Simulation_Name,
                                               list.dirs(path=paste0(SCOPE_dir,"output"),
                                                         full.names = TRUE,
                                                         recursive = FALSE),
@@ -77,6 +78,8 @@ get_parameters <- function(
                                     collapse = NULL, recycle0 = FALSE),
                              pattern= "filenames",
                              full.names = TRUE)
+
+  Inputs_files <- gtools::mixedsort(sort(Outputs_files_str))
 
   Inputs_list <- lapply(1:length(Inputs_files), function(i) invisible(readr::read_csv(Inputs_files[i], col_names = FALSE)))
 
@@ -92,7 +95,7 @@ get_parameters <- function(
                    function(i) Inputs_list[[i]][dplyr::filter(inputs_true, check == TRUE)$col,])
 
   # SCOPE model constants
-  Constants_files <- list.files(paste0(path=grep(Simulation_Name,
+  Constants_files_str <- list.files(paste0(path=grep(Simulation_Name,
                                                  list.dirs(path=paste0(SCOPE_dir,"output"),
                                                            full.names = TRUE,
                                                            recursive = FALSE),
@@ -100,6 +103,8 @@ get_parameters <- function(
                                        collapse = NULL, recycle0 = FALSE),
                                 pattern= "input_data",
                                 full.names = TRUE)
+
+  Constants_files <- gtools::mixedsort(sort(Constants_files_str))
 
   Constants_list <- lapply(1:length(Constants_files), function(i) invisible(readr::read_csv(Constants_files[i],
                                                                                   col_names = FALSE)))
@@ -120,7 +125,7 @@ get_parameters <- function(
                       function(i) Constants_list[[i]][dplyr::filter(constants_true, check == TRUE)$col,])
 
   # SCOPE model settings
-  Settings_files <- list.files(paste0(path=grep(Simulation_Name,
+  Settings_files_str <- list.files(paste0(path=grep(Simulation_Name,
                                                 list.dirs(path=paste0(SCOPE_dir,"output"),
                                                           full.names = TRUE,
                                                           recursive = FALSE),
@@ -128,6 +133,8 @@ get_parameters <- function(
                                       collapse = NULL, recycle0 = FALSE),
                                pattern= "setoptions",
                                full.names = TRUE)
+
+  Settings_files <- gtools::mixedsort(sort(Settings_files_str))
 
   Settings_list <- lapply(1:length(Settings_files), function(i) invisible(readr::read_csv(Settings_files[i],
                                                                                 col_names = FALSE)))
@@ -140,20 +147,35 @@ get_parameters <- function(
   Settings <- lapply(1:length(Settings_files),
                      function(i) Settings_list[[i]][dplyr::filter(settings_true, check == TRUE)$col,])
 
-  SCOPE_parameters <- NULL
+  if(per_simulation == TRUE){
 
-  for (i in 1:length(Settings_list)) {
-    SCOPE_parameters[[i]] <- data.frame(
-      "Model_Parameter" = c("Simulation", "Folder_name",
-                            Inputs[[i]][[1]][1:2],
-                            "Model_Inputs (Variables)", Inputs[[i]][[1]][-1:-2],
-                            "Model_Inputs (Constants)", Constants[[i]][[1]],
-                            "Model_Settings", Settings[[i]][[2]]),
-      "Values_and_Settings" = c("###################", stringr::str_split(Inputs_files, "/")[[i]][4],
-                                Inputs[[i]][[2]][1:2],
-                                "###################", Inputs[[i]][[2]][-1:-2],
-                                "###################", Constants[[i]][[2]],
-                                "###################", Settings[[i]][[1]]))
+    SCOPE_parameters <- NULL
+
+    for (i in 1:length(Settings_list)) {
+      SCOPE_parameters[[i]] <- data.frame(
+        "Model_Parameter" = c("Simulation", "Folder_name",
+                              Inputs[[i]][[1]][1:2],
+                              "Model_Inputs (Variables)", Inputs[[i]][[1]][-1:-2],
+                              "Model_Inputs (Constants)", Constants[[i]][[1]],
+                              "Model_Settings", Settings[[i]][[2]]),
+        "Values_and_Settings" = c("###################", stringr::str_split(Inputs_files, "/")[[i]][4],
+                                  Inputs[[i]][[2]][1:2],
+                                  "###################", Inputs[[i]][[2]][-1:-2],
+                                  "###################", Constants[[i]][[2]],
+                                  "###################", Settings[[i]][[1]]))
+    }
+
+    }else{
+
+  SCOPE_parameters <- tibble::tibble(data.frame(t(sapply(1:length(Settings_list), function(i) unlist(
+    c(t(Inputs[[i]][[2]]),
+       t(Constants[[i]][[2]]),
+        t(Settings[[i]][[1]])))))))
+
+  colnames(SCOPE_parameters) <- as.character(c((Inputs[[1]][[1]]),
+                                  (Constants[[1]][[1]]),
+                                  (Settings[[1]][[2]])))
+
   }
 
   return(SCOPE_parameters)

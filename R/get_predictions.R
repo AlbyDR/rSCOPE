@@ -25,7 +25,7 @@ get_predictions <- function(
   output_file = "fluxes.csv",
   pred_vec = "lEtot"
 ){
-  Outputs_files <- list.files(paste0(path=grep(Simulation_Name,
+  Outputs_files_str <- list.files(paste0(path=grep(Simulation_Name,
                                                list.dirs(path=paste0(SCOPE_dir,"output"),
                                                          full.names = TRUE,
                                                          recursive = FALSE),
@@ -33,6 +33,8 @@ get_predictions <- function(
                                      "/", collapse = NULL, recycle0 = FALSE),
                               pattern= output_file,
                               full.names = TRUE)
+
+  Outputs_files <- gtools::mixedsort(sort(Outputs_files_str))
 
   Outputs_list <- lapply(1:length(Outputs_files), function(i)  readr::read_csv(Outputs_files[i],
                                                                                col_names = T,
