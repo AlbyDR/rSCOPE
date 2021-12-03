@@ -52,7 +52,7 @@ split_df <- function(
   df$parts <- rep(seq(1:n_parts), each = (length(df$t)/n_parts))
 
   if(split_by == "id_pixel"){
-    df <- dplyr::filter(df, df[,split_by] %in% pixel_id)
+    df <- dplyr::filter(df, df[,split_by] == pixel_id)
     df_splited <- split(df, df[split_by])
 
     lapply(1:length(df_splited), function(x){
