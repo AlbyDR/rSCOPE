@@ -7,6 +7,7 @@
 get_parameters(
   SCOPE_dir = "D:/SCOPE-master/",
   Simulation_Name,
+  per_simulation = TRUE,
   soil_file = TRUE,
   name_simulation = TRUE,
   t = FALSE,

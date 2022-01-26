@@ -144,7 +144,7 @@ get_DWDdata <- function(
                                 per = period,
                                 var = meteo_var)
 
-  DWDdir <- file.path(tempdir(), "DWDdir")
+  DWDdir <- file.path(tempdir())
 
   dir.create(DWDdir)
 

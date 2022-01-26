@@ -221,16 +221,16 @@ extract_fp <- function(
                 input_fp_raster <- input_raster*footprint
                 # extract the average (i.e. sum) of all the layers in the raster
                 input_FP <- sapply(1:raster::nlayers(input_raster), function(i) sum(raster::values(input_fp_raster[[i]]), na.rm = TRUE))
-                input_FP <- c(timestamp, input_FP)
-                names(input_FP) <- c("timestamp", names(input_raster))
+                # input_FP <- c(lubridate::ydm_hms(timestamp[i]), t(input_FP))
+                # names(input_FP) <- c("timestamp", names(input_raster))
                 ## if the input_raster is already in the same resolution and extent of the FP
               }else{
                 # multiply the FP probability to all layers in the raster
                 input_fp_raster <- input_raster*footprint
                 # extract the average (i.e. sum) of all the layers in the raster
                 input_FP <- sapply(1:raster::nlayers(input_raster), function(i) sum(raster::values(input_fp_raster[[i]]), na.rm = TRUE))
-                input_FP <- c(timestamp, input_FP)
-                names(input_FP) <- c("timestamp", names(input_raster))
+                # input_FP <- c(lubridate::ydm_hms(timestamp[i]), t(input_FP))
+                # names(input_FP) <- c("timestamp", names(input_raster))
               }
     ### if is a multilayer raster or a data frame of pixel values that vary on time (timestamp)
   }else{
