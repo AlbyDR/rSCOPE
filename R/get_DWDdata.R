@@ -144,15 +144,12 @@ get_DWDdata <- function(
                                 per = period,
                                 var = meteo_var)
 
-  DWDdir <- file.path(tempdir())
+    # download file:
+  data_name <- rdwd::dataDWD(links_data, dir = "DWDdata", read = FALSE)
 
-  dir.create(DWDdir)
-
-  # download file:
-  data_name <- rdwd::dataDWD(links_data, dir = DWDdir, read = FALSE)
 
   # read and plot file:
-  data_set <- rdwd::readDWD(data_name, varnames = FALSE, tz = "UTC") #, format = NULL
+  data_set <- rdwd::readDWD(sub(paste0(getwd(),"/"), "", data_name), varnames = FALSE, tz = "UTC") #, format = NULL
 
   delete_staions <- as.vector(stats::na.omit(sapply(1:length(data_set), function(i)
     ifelse((as.Date(utils::tail(data_set[[i]]$MESS_DATUM, n = 1)) >= as.Date(end_date)) == FALSE |
@@ -181,7 +178,7 @@ get_DWDdata <- function(
   ts <- seq(as.POSIXct(as.Date(start_date), tz = "UTC"), as.POSIXct(as.Date(end_date)+1, tz = "UTC"),
             by = by_lag) #"30 min"
 
-  ts <- force_tz(ts, tz = "UTC")
+  ts <- lubridate::force_tz(ts, tz = "UTC")
 
   ts <- data.frame("MESS_DATUM" = ts[24:(length(ts)-2)])
 
