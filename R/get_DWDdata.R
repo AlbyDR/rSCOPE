@@ -195,8 +195,6 @@ get_DWDdata <- function(
 
   colnames(data_set_period) <- sapply(1:length(data_set_period), function(i) paste0("ID_", data_set[[i]][1,1]))
 
-  unlink(DWDdir, recursive = TRUE)
-
   dataset <- data.frame("timestamp" = ts, data_set_period)
 
   names(stations_loc) <- c("stations_id", "start_date", "end_date", "station_height", "latitude", "longitude",
