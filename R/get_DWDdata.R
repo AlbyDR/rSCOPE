@@ -139,7 +139,6 @@ get_DWDdata <- function(
   stations_loc <- stations_loc[-1,]
 
   links_data <- rdwd::selectDWD(stations_loc$Stationsname,
-                                outvec =  TRUE,
                                 res = time_lag,
                                 per = period,
                                 var = meteo_var)
@@ -183,7 +182,19 @@ get_DWDdata <- function(
   ts <- data.frame("MESS_DATUM" = ts[24:(length(ts)-2)])
 
   data_set_period_NA <- sapply(1:length(data_set), function(i) dplyr::left_join(ts, data_set[[i]],
-                                                                                by = "MESS_DATUM")[var_name])
+                                                               by = "MESS_DATUM")[var_name])
+
+  for (i in 1:length(data_set_period_NA)) {
+    ifelse(is.na(tail(data_set_period_NA[[i]],1))==TRUE,
+           data_set_period_NA[[i]][length(data_set_period_NA[[i]])] <- round(mean(sapply(data_set_period_NA,tail,1), na.rm = TRUE),2),
+           NA)
+  }
+
+  for (i in 1:length(data_set_period_NA)) {
+    ifelse(is.na(head(data_set_period_NA[[i]],1))==TRUE,
+           data_set_period_NA[[i]][length(data_set_period_NA[[i]])] <- round(mean(sapply(data_set_period_NA,head,1), na.rm = TRUE),2),
+           NA)
+  }
 
   data_set_period <- data.frame("MESS_DATUM" = ts)
 
