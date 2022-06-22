@@ -47,13 +47,12 @@ get_Solardata <- function(
   stations_loc <- stations_loc[-1,]
 
   links_data <- rdwd::selectDWD(stations_loc$Stationsname,
-                                outvec =  TRUE,
                                 res = time_lag,
                                 var = meteo_var)
   # download file:
-  data_name <- rdwd::dataDWD(links_data, dir = data_dir, read = FALSE)
+  data_name <- rdwd::dataDWD(links_data, dir = "DWDdata", read = FALSE)
   # read and plot file:
-  data_set <- rdwd::readDWD(data_name, varnames = FALSE, tz = "UTC") #, format = NULL
+  data_set <- rdwd::readDWD(sub(paste0(getwd(),"/"), "", data_name), varnames = FALSE, tz = "UTC") #, format = NULL
 
   ts <- seq(as.POSIXct(start_date, tz = "UTC"), as.POSIXct(end_date, tz = "UTC"),
             by = "hour") #"30 min"

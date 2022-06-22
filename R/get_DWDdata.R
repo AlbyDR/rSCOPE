@@ -146,7 +146,6 @@ get_DWDdata <- function(
     # download file:
   data_name <- rdwd::dataDWD(links_data, dir = "DWDdata", read = FALSE)
 
-
   # read and plot file:
   data_set <- rdwd::readDWD(sub(paste0(getwd(),"/"), "", data_name), varnames = FALSE, tz = "UTC") #, format = NULL
 
@@ -184,25 +183,48 @@ get_DWDdata <- function(
   data_set_period_NA <- sapply(1:length(data_set), function(i) dplyr::left_join(ts, data_set[[i]],
                                                                by = "MESS_DATUM")[var_name])
 
-  for (i in 1:length(data_set_period_NA)) {
-    ifelse(is.na(tail(data_set_period_NA[[i]],1))==TRUE,
-           data_set_period_NA[[i]][length(data_set_period_NA[[i]])] <- round(mean(sapply(data_set_period_NA,tail,1), na.rm = TRUE),2),
-           NA)
-  }
-
-  for (i in 1:length(data_set_period_NA)) {
-    ifelse(is.na(head(data_set_period_NA[[i]],1))==TRUE,
-           data_set_period_NA[[i]][length(data_set_period_NA[[i]])] <- round(mean(sapply(data_set_period_NA,head,1), na.rm = TRUE),2),
-           NA)
-  }
-
   data_set_period <- data.frame("MESS_DATUM" = ts)
 
-  for (i in 1:length(data_set_period_NA)) {
-    ifelse(meteo_var == "sun",
-           data_set_period[i] <- c(c(0,0,0), zoo::na.approx(data_set_period_NA[[i]]), c(0,0,0)),
-           data_set_period[i] <- c(as.numeric(zoo::na.approx(data_set_period_NA[[i]]))) )
+  # the sun duration exclude night time
+  if (meteo_var == "sun") {
+
+    for (i in 1:length(data_set_period_NA)) {
+      ifelse(is.na(tail(data_set_period_NA[[i]])[3])==TRUE,
+             data_set_period_NA[[i]][length(data_set_period_NA[[i]])-3] <- round(mean(sapply(data_set_period_NA,tail,4)[1,], na.rm = TRUE),2),
+             NA)
+    }
+
+
+    for (i in 1:length(data_set_period_NA)) {
+      ifelse(is.na(head(data_set_period_NA[[i]])[4])==TRUE,
+             data_set_period_NA[[i]][4] <- round(mean(sapply(data_set_period_NA,head,4)[4,], na.rm = TRUE),2),
+             NA)
+    }
+
+    for (i in 1:length(data_set_period_NA)) {
+      data_set_period[i] <- c(c(0,0,0), zoo::na.approx(data_set_period_NA[[i]]), c(0,0,0))
+
+    }
+
+  } else {
+    # otherwise test if the first or last value is NA
+    for (i in 1:length(data_set_period_NA)) {
+      ifelse(is.na(tail(data_set_period_NA[[i]],1))==TRUE,
+             data_set_period_NA[[i]][length(data_set_period_NA[[i]])] <- round(mean(sapply(data_set_period_NA,tail,1), na.rm = TRUE),2),
+             NA)
+    }
+
+    for (i in 1:length(data_set_period_NA)) {
+      ifelse(is.na(head(data_set_period_NA[[i]],1))==TRUE,
+             data_set_period_NA[[i]][1] <- round(mean(sapply(data_set_period_NA,head,1), na.rm = TRUE),2),
+             NA)
+    }
+
+    for (i in 1:length(data_set_period_NA)) {
+               data_set_period[i] <- c(as.numeric(zoo::na.approx(data_set_period_NA[[i]])))
   }
+        }
+
 
   colnames(data_set_period) <- sapply(1:length(data_set_period), function(i) paste0("ID_", data_set[[i]][1,1]))
 
