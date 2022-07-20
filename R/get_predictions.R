@@ -33,22 +33,17 @@ get_predictions <- function(
                                      "/", collapse = NULL, recycle0 = FALSE),
                               pattern= output_file,
                               full.names = TRUE)
-
+  # the order is wrong 1 10 11 ... 2 20 21 ..
+    # correct the order 1 2 3 4 ... 55
   Outputs_files <- gtools::mixedsort(sort(Outputs_files_str))
+  # read the list of files
+  Outputs_list <- lapply(1:length(Outputs_files),
+                              function(i)  data.table::fread(Outputs_files[i],skip=2))
 
-  Outputs_list <- lapply(1:length(Outputs_files), function(i)  readr::read_csv(Outputs_files[i],
-                                                                               col_names = T,
-                                                                               readr::cols(.default = readr::col_double()))[-1,])
+  # stack all the subsets
+  prediction <- data.table::as.data.table(dplyr::bind_rows(Outputs_list))
 
-  for (i in 1:length(Outputs_list)) {
-    colnames(Outputs_list[[i]])[which(colnames(Outputs_list[[i]]) == pred_vec)] <- "pred"
-  }
-
-  prediction <- data.frame(sapply(1:length(Outputs_files), function(i) Outputs_list[[i]]$pred))
-
-  colnames(prediction) <- sapply(1:length(Outputs_list), function(i) stringr::str_split(Outputs_files, "/")[[i]][4])
-
-  prediction <- tibble::tibble(prediction)
+  names(prediction) <- names(data.table::fread(Outputs_files[1]))
 
   return(prediction)
 

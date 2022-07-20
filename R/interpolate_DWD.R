@@ -30,15 +30,16 @@ interpolate_DWD <- function(
   vgm_model = c("Exp", "Mat", "Gau", "Sph")
   ){
 
+  sink("NUL")
   Rasterdir <- file.path(tempdir(), "Rasterdir")
 
   dir.create(Rasterdir)
 
-  sink("NUL")
   tmpdir_raster <- raster::rasterOptions()$tmpdir
   raster::rasterOptions(tmpdir = Rasterdir)
-  options(warn = -1)
+  on.exit(sink())
 
+  options(warn = -1)
   stations <- matrix(cbind(stations_DWD$longitude,
                            stations_DWD$latitude),
                      length(stations_DWD$longitude))
@@ -69,11 +70,12 @@ interpolate_DWD <- function(
   krg_var = raster::raster(krg_var)
   krg_var = raster::crop(x = krg_var, crop_extent)
 
-  options(warn = 1)
-
   unlink(Rasterdir, recursive = TRUE)
   raster::rasterOptions(tmpdir = tmpdir_raster)
-  sink()
 
   return(krg_var)
+
+  on.exit(options(warn = 0))
+
 }
+

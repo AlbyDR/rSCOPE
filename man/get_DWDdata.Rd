@@ -73,9 +73,9 @@ The meteorological variables are provide in data.frame per station id.
 ### meteo_var = "moisture" (atm)
 # var_name = P_STD	  Hourly air pressure	[hpa]
 # var_name = RF_STD	Hourly values of relative humidity	[\%]
-# var_name = TD_STD	Dew point temperature at 2m height	[Â°C]
-# var_name = TF_STD	Calculated hourly values of the wet temperature	[Â°C]
-# var_name = TT_STD	Air temperature at 2m height	[Â°C]
+# var_name = TD_STD	Dew point temperature at 2m height	[°C]
+# var_name = TF_STD	Calculated hourly values of the wet temperature	[°C]
+# var_name = TT_STD	Air temperature at 2m height	[°C]
 # var_name = VP_STD	calculated hourly values of the vapour pressure [hpa]
 ### meteo_var = "sun"
 # var_name = SD_SO   # sunshine duration - minutes

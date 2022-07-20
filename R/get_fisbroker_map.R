@@ -19,7 +19,8 @@ get_fisbroker_map <- function(url,
                     version = "2.0.0",
                     request = "GetFeature",
                     srsName = "EPSG:25833",
-                    TYPENAMES = typenames)
+                    TYPENAMES = typenames,
+                    outputFormat = "application/json")
   request <- httr::build_url(url)
   print(request)
   out <- sf::read_sf(request)
