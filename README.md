@@ -28,7 +28,7 @@ The flowchart shows the two-stage modelling processing to derive urban ET and gr
 
   - Urban ET [mm] for different aggregation periods (from hourly to annual) that can be divided by soil and canopy.
 
-<img src="https://user-images.githubusercontent.com/40297927/179981850-81031b28-5ea2-4858-b900-ae267a3f479e.png" width=50% height=50%>
+<img src="https://user-images.githubusercontent.com/40297927/179995862-a31b8c07-e85e-4b4f-853c-35d06788b16e.png" width=80% height=80%>
 
 ###### Fig. Map of annual ET for Berlin in 2020 (a), zoom-in for the surroundings of the two EC towers, the built-up area TUCC (b) and the residential area ROTH (c), and an urban forest close to residential areas. The distribution of daily modelled ET in the year 2020 at the three locations (e), the red line (built-up area), the black (residential area) and the green (urban forest). The daily ET values from the two towers were extracted (average) using footprints, while the forest values were extracted for the specific forest polygon. Water bodies are not considered in the model and are represented in white.
 
