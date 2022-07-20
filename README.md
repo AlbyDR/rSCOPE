@@ -12,7 +12,7 @@ Rocha, A. D., Vulova, S., Meier, F., Förster, M., & Kleinschmit, B. (2022). Map
 
 Duarte Rocha, A., Vulova, S., van der Tol, C., Förster, M., and Kleinschmit, B.: Modelling hourly evapotranspiration in urban environments with SCOPE using open remote sensing and meteorological data, Hydrol. Earth Syst. Sci., 26, 1111–1129, https://doi.org/10.5194/hess-26-1111-2022, 2022.
 
-#### Package repository
+#### Code repository
 The codes to run the rSCOPE package for the input pre-processing, modelling and mapping for the Berlin study case is available in the GitHub https://github.com/AlbyDR/URBAN_ET
 
 #### Data repository
