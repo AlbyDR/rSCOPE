@@ -1,7 +1,7 @@
 ## rSCOPE
 Run SCOPE model from R. There are functions to download and interpolate the DWD data to use as model inputs. Download Berlin Environmental Atlas maps. Calculate zd/z0 and hourly footprints to extract information about surface properties from raster layers (e.g. LAI, vegetation height and #' vegetation cover). Organize the model inputs and run SCOPE. Get the parameters (input, constant and settings), calculate model accuracy. Functions to generate Urban ET maps and indices of greening cooling services, and also create a animate 24 hours or month ET GIF maps. 
 
-### devtools::install_github("AlbyDR/rSCOPE")
+#### devtools::install_github("AlbyDR/rSCOPE")
 #### library(rSCOPE)
 
 #### Citation
@@ -26,7 +26,7 @@ The flowchart shows the two-stage modelling processing to derive urban ET and gr
 
 ### Output products:
 
-#### Urban ET [mm] for different aggregation periods (from hourly to annual) that can be divided by soil and canopy.
+#### - Urban ET [mm] for different aggregation periods (from hourly to annual) that can be divided by soil and canopy.
 
 <img src="https://user-images.githubusercontent.com/40297927/179981850-81031b28-5ea2-4858-b900-ae267a3f479e.png" width=50% height=50%>
 
