@@ -26,7 +26,7 @@ The flowchart shows the two-stage modelling processing to derive urban ET and gr
 
 ### Output products:
 
-#### - Urban ET [mm] for different aggregation periods (from hourly to annual) that can be divided by soil and canopy.
+. #### Urban ET [mm] for different aggregation periods (from hourly to annual) that can be divided by soil and canopy.
 
 <img src="https://user-images.githubusercontent.com/40297927/179981850-81031b28-5ea2-4858-b900-ae267a3f479e.png" width=50% height=50%>
 
