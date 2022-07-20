@@ -21,6 +21,7 @@ install.packages("https://cran.r-project.org/src/contrib/Archive/FREddyPro/FREdd
 The flowchart shows the two-stage modelling processing to derive urban ET and greening cooling service index from open-access data inputs.
 
 <img src="https://user-images.githubusercontent.com/40297927/179981190-b0a6445c-e067-40cd-8e4c-78d7d809bad7.png" width=70% height=70%>
+
 ###### Fig. Flowchart of the two-stage modelling approach to derive urban ET from open-access data inputs.
 
 ### Output products:
