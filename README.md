@@ -34,4 +34,4 @@ The flowchart shows the two-stage modelling processing to derive urban ET and gr
 
   - Greening cooling service index (GCoS) and two sub-indices: Evapotranspirative Cooling Service (ECoS) and Radiative Cooling Service (RCoS).
 
-<img src="https://user-images.githubusercontent.com/40297927/179993484-fc174d4f-02b5-4c3f-bd8f-7d0afae4cf4f.png" width=100% height=100%>
+<img src="https://user-images.githubusercontent.com/40297927/179993484-fc174d4f-02b5-4c3f-bd8f-7d0afae4cf4f.png" width=80% height=80%>
