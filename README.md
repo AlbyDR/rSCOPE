@@ -3,8 +3,11 @@ Run SCOPE model from R. There are functions to download and interpolate the DWD 
 
 Duarte Rocha, Alby, Stenka Vulova, Christiaan van der Tol, Michael Förster, and Birgit Kleinschmit. "Modelling hourly evapotranspiration in urban environments with SCOPE using open remote sensing and meteorological data." Hydrology and Earth System Sciences 26, no. 4 (2022): 1111-1129.
 
-##### devtools::install_github("AlbyDR/rSCOPE")
-##### library(rSCOPE)
+### devtools::install_github("AlbyDR/rSCOPE")
+#### library(rSCOPE)
+
+### Citation
+Duarte Rocha, A.: AlbyDR/rSCOPE: rSCOPE v1.0 (Evapotranspiration), Zenodo [code], https://doi.org/10.5281/zenodo.6204580, 2022.
 
 #### MATLAB R2015b or superior is required to run SCOPE and the SCOPE code need to be downloaded and unzipped in a directory of your choice. The SCOPE code is available at https://github.com/Christiaanvandertol/SCOPE/releases/tag/v2.0 and the documentation at https://scope-model.readthedocs.io/en/latest/
 
