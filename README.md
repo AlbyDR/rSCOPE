@@ -26,13 +26,13 @@ The flowchart shows the two-stage modelling processing to derive urban ET and gr
 
 ### Output products:
 
-. #### Urban ET [mm] for different aggregation periods (from hourly to annual) that can be divided by soil and canopy.
+. Urban ET [mm] for different aggregation periods (from hourly to annual) that can be divided by soil and canopy.
 
 <img src="https://user-images.githubusercontent.com/40297927/179981850-81031b28-5ea2-4858-b900-ae267a3f479e.png" width=50% height=50%>
 
 ###### Fig. Map of annual ET for Berlin in 2020 (a), zoom-in for the surroundings of the two EC towers, the built-up area TUCC (b) and the residential area ROTH (c), and an urban forest close to residential areas. The distribution of daily modelled ET in the year 2020 at the three locations (e), the red line (built-up area), the black (residential area) and the green (urban forest). The daily ET values from the two towers were extracted (average) using footprints, while the forest values were extracted for the specific forest polygon. Water bodies are not considered in the model and are represented in white.
 
-#### Greening cooling service index (GCoS) and two sub-indices: Evapotranspirative Cooling Service (ECoS) and Radiative Cooling Service (RCoS).
+. Greening cooling service index (GCoS) and two sub-indices: Evapotranspirative Cooling Service (ECoS) and Radiative Cooling Service (RCoS).
 
 <img src="https://user-images.githubusercontent.com/40297927/179981011-3e247d62-12e3-415e-9587-a039b0472f57.png" width=50% height=50%>
 <img src="https://user-images.githubusercontent.com/40297927/179981084-973cfd52-2179-44f2-8e65-905bac58c418.png" width=50% height=50%>
