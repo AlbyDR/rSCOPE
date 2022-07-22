@@ -1,4 +1,4 @@
-#' run_SCOPE
+#' run_SCOPEv2
 #'
 #' This is a function to run SCOPE/Matlab simulations from r changing model inputs and setting.
 #' It will open automatic Matlab, run SCOPE and close when the simulation finish.
@@ -7,7 +7,7 @@
 #' @param Simulation_Name the name of the files start with
 #' @param t the variable name in the df for the BerkeleyJulianDate, e.g. "t".
 #' @param Rin,Rin the variables Rin (shortwave solar radiation), Rli (longwave radiation).
-#' @param p,Ta,RH,ea,VPD the variables p (air pressure), Ta (air temperature), RH (relative humidity), ea (vapour pressure) and VPD (vapour pressure deficit).
+#' @param p,Ta,RH,ea the variables p (air pressure), Ta (air temperature), RH (relative humidity), ea (vapour pressure).
 #' @param u the variable (wind speed).
 #' @param psi the variables psi (relative angle), tts (zenith solar angle), tto (observed angle).
 #' @param SMC,LAI,hc the variables (soil moisture content at the root deep), LAI (Leaf Area Index), hc (canopy height).
@@ -20,17 +20,17 @@
 #' @param split_values split_pixels[i] or split_week[i] from 1:53 then the result is like "week_52"
 #' @return It return a message "done!". A set of files from the simulation will be save on the SCOPE directory/output/simulation_name
 #' @examples
-#' Examples of uses of the run_SCOPE function
+#' Examples of uses of the run_SCOPEv2 function
 #' #########
 #' run one file in the environment that will be saved on the SCOPE directory
 #'
-#' run_SCOPE(SCOPE_dir = "D:/SCOPE-master/", # SCOPE directory patch
+#' run_SCOPEv2(SCOPE_dir = "D:/SCOPE-master/", # SCOPE directory patch
 #'          csv_inputs = Inputs_pixels_ROTH, # file name with all inputs (variables)
 #'          Simulation_Name = "ROTH",
 #'          # variables
 #'          t = "t", # time BerkeleyJulianDate
 #'          Rin = "Rin", Rli = "Rli",
-#'          p = "p", Ta = "Ta", RH = "RH", ea = "ea", VPD = NA,
+#'          p = "p", Ta = "Ta", RH = "RH", ea = "ea",
 #'          u = "ws",
 #'          tts = "tts", tto = NA, psi = "psi", # geometry
 #'          SMC = "SMC_40", # soil
@@ -49,7 +49,7 @@
 #'
 #' run divided/spit by pixel
 #'
-#' run_SCOPE(csv_inputs = Inputs_Berlin_masked,
+#' run_SCOPEv2(csv_inputs = Inputs_Berlin_masked,
 #'          Simulation_Name = "Pixel_",
 #'          split = TRUE,
 #'          col_split = "id_pixel",
@@ -75,7 +75,7 @@
 #' n = 2
 #'
 #' for (i in 1:n) {
-#'  run_SCOPE(csv_inputs = Inputs_Berlin_masked,
+#'  run_SCOPEv2(csv_inputs = Inputs_Berlin_masked,
 #'            Simulation_Name = paste0("pixel_", i),
 #'            split = TRUE,
 #'            col_split = "id_pixel", #dataset_for_verification
@@ -119,7 +119,7 @@
 #'            NA,     NA,    NA,    NA,       10,     2,    10,    10)
 #'
 #'for (i in 1:length(SMC_i)) {
-#'  run_SCOPE(csv_inputs = Inputs_Berlin_masked,
+#'  run_SCOPEv2(csv_inputs = Inputs_Berlin_masked,
 #'            Simulation_Name = paste0("pixel_882_", i),
 #'            split = TRUE,
 #'            col_split = "id_pixel", #dataset_for_verification
@@ -156,7 +156,7 @@
 #' n2 = 12
 
 #' for (i in 9:n2) {
-#'   run_SCOPE(csv_inputs = Inputs_Berlin_masked,
+#'   run_SCOPEv2(csv_inputs = Inputs_Berlin_masked,
 #'             Simulation_Name = paste0("week_", i, "_SMC60_LAI_hc"),
 #'             split = TRUE,
 #'             col_split = "week", #dataset_for_verification
@@ -181,61 +181,75 @@
 #' }
 #'
 #' @export
-run_SCOPE <- function(
-  csv_inputs,
-  SCOPE_dir = "D:/SCOPE-master/",
-  ### model inputs variables
-  filenames = filenames,
-  Simulation_Name,
-  soil_file = "soilnew.txt",
-  # time BerkeleyJulianDate  # atmosphere conditions
-  t = NA,  Rin = NA, Rli = NA, p = NA, Ta = NA, RH = NA, ea = NA, VPD = NA, u = NA,
-  # geometry                                #z          #CO2
-  tts = NA, tto = NA, psi = NA, z = NA, Ca = NA,
-  # soil
-  SMC = NA, BSMBrightnes= NA, BSMlat= NA, BSMlon= NA,
-  # vegetation
-  LAI = NA, hc = NA, Cab = NA, Cca = NA, Cdm = NA, Cw = NA, Cs = NA,
-  Cant = NA, LIDFa = NA, LIDFb = NA, Vcmax25 = NA, BallBerrySlope = NA,
-  ### model inputs constant
-  input_data_default = input_data_default,
-  # fixed parameters
-  PROSPECT = NA, Cab_c = 40,  Cca_c = 10 , Cdm_c = 0.012, Cw_c = 0.009, Cs_c = 0, Cant_c = 1,
-  cp = 0, Cbc = 0, Cp = 0, N = 1.5, rho_thermal = 0.010, tau_thermal = 0.010,
+run_SCOPEv2 <- function(
+    csv_inputs,
+    SCOPE_dir = "D:/SCOPE-master/",
 
+    ### model inputs variables
+
+    filenames = filenames,
+    Simulation_Name,
+    soil_file = "soilnew.txt",
+
+    # time BerkeleyJulianDate  # atmosphere conditions
+    t = NA,  Rin = NA, Rli = NA, p = NA, Ta = NA, RH = NA, ea = NA, u = NA,
+    # geometry                    #z          #CO2
+    tts = NA, tto = NA, psi = NA, z = NA, Ca = NA,
+    # soil
+    SMC = NA, BSMBrightnes= NA, BSMlat= NA, BSMlon= NA,
+    # vegetation
+    LAI = NA, hc = NA, Cab = NA, Cca = NA, Cdm = NA, Cw = NA, Cs = NA,
+    Cant = NA, LIDFa = NA, LIDFb = NA, Vcmax25 = NA, BallBerrySlope = NA,
+
+    ### model inputs constant
+
+    input_data_default = input_data_default,
+
+    ## fixed parameters
+    # PROSPECT
+    PROSPECT = NA, Cab_c = 40,  Cca_c = 10 , Cdm_c = 0.012, Cw_c = 0.009, Cs_c = 0, Cant_c = 1,
+    cp = 0, Cbc = 0, Cp = 0, N = 1.5, rho_thermal = 0.010, tau_thermal = 0.010,
+    # Leaf_Biochemical
     Leaf_Biochemical = NA, Vcmax25_c =  60, BallBerrySlope_c = 8, BallBerry0 = 0.010, Type = 0,
-  kV = 0.640, Rdparam = 0.015, Kn0 = 2.480, Knalpha = 2.830, Knbeta = 0.114,
+    kV = 0.640, Rdparam = 0.015, Kn0 = 2.480, Knalpha = 2.830, Knbeta = 0.114,
+    # Leaf_Biochemical_magnani
+    Leaf_Biochemical_magnani = NA, Tyear = 15, beta = 0.510, kNPQs = 0, qLs = 1, stressfactor = 1,
+    # Fluorescence
+    Fluorescence = NA, fqe = 0.010,
+    # Soil
+    Soil = NA, spectrum = 1, rss = 500, rs_thermal = 0.060, cs = 1180,
+    rhos = 1800, lambdas = 1.550, SMC_c = 25.0, BSMBrightness_c = 0.50, BSMlat_c = 25.0, BSMlon_c = 45.0,
+    # canopy
+    Canopy = NA, LAI_c = 3, hc_c = 2, LIDFa_c = -0.350, LIDFb_c = -0.150, leafwidth = 0.1, Cv = 1.0,
+    crowndiameter = 1.0,
+    # meteorological
+    Meteo = NA, z_c = NA, Rin_c = 600, Ta_c = 20, Rli_c = 300,
+    p_c = 970, ea_c = 15, u_c = 2, Ca_c = 410, Oa = 209,
+    # Aerodynamic
+    Aerodynamic = NA, zo = 0.250, d = 1.340, Cd = 0.30, rb =  10.00, CR = 0.35, CD1 = 20.60,
+    Psicor = 0.20, CSSOIL = 0.01, rbs = 10.00, rwc = 0,
+    # timeseries
+    timeseries = NA, startDOY = 20190101, endDOY =20191231, LAT = 52.00, LON = 13.00, timezn = 0,
+    # sun Angles
+    Angles = NA, tts_c = 30, tto_c = 0, psi_c = 0,
 
-  Leaf_Biochemical_magnani = NA, Tyear = 15, beta = 0.510, kNPQs = 0, qLs = 1, stressfactor = 1,
+    ### model settings
 
-  Fluorescence = NA, fqe = 0.010,
+    setoptions = setoptions,
+    # options
+    lite = 1, verify = 0, saveCSV = 1, mSCOPE = 0, simulation = 1, save_spectral = 0,
+    calc_fluor = 0, calc_planck = 0,  calc_xanthophyllabs = 0, Fluorescence_model = 0,
+    calc_directional = 0, calc_vert_profiles = 0,
+    soilspectrum = 1, applTcorr = 1, soil_heat_method = 2, calc_rss_rbs = 0,  MoninObukhov = 1, #calc_ebal = 1,
 
-  Soil = NA, spectrum = 1, rss = 500, rs_thermal = 0.060, cs = 1180,
-  rhos = 1800, lambdas = 1.550, SMC_c = 25.0, BSMBrightness_c = 0.50, BSMlat_c = 25.0, BSMlon_c = 45.0,
+    ### model run file instructions
+    set_parameter_filenames = set_parameter_filenames,
 
-  Canopy = NA, LAI_c = 3, hc_c = 2, LIDFa_c = -0.350, LIDFb_c = -0.150, leafwidth = 0.1, Cv = 1.0,
-  crowndiameter = 1.0,
+    # If the run is divided in subfiles
+    split = FALSE,
+    col_split = "",
+    split_values
 
-  Meteo = NA, z_c = NA, Rin_c = 600, Ta_c = 20, Rli_c = 300,
-  p_c = 970, ea_c = 15, u_c = 2, Ca_c = 410, Oa = 209,
-
-  Aerodynamic = NA, zo = 0.250, d = 1.340, Cd = 0.30, rb =  10.00, CR = 0.35, CD1 = 20.60,
-  Psicor = 0.20, CSSOIL = 0.01, rbs = 10.00, rwc = 0,
-
-  timeseries = NA, startDOY = 20190101, endDOY =20191231, LAT = 52.00, LON = 13.00, timezn = 0,
-
-  Angles = NA, tts_c = 30, tto_c = 0, psi_c = 0,
-  ### model settings
-  setoptions = setoptions,
-  lite = 1, verify = 0, saveCSV = 1, mSCOPE = 0, simulation = 1, save_spectral = 0,
-  calc_fluor = 0, calc_planck = 0,  calc_xanthophyllabs = 0, Fluorescence_model = 0,
-  calc_directional = 0, calc_vert_profiles = 0,
-  soilspectrum = 1, applTcorr = 1, soil_heat_method = 2, calc_rss_rbs = 0,  MoninObukhov = 1, #calc_ebal = 1,
-  ### model run file instructions
-  set_parameter_filenames = set_parameter_filenames,
-  split = FALSE,
-  col_split = "",
-  split_values
 ){
   # split in subfile if split argument is true
   if(split == TRUE){
@@ -243,18 +257,20 @@ run_SCOPE <- function(
     csv_inputs <- dplyr::filter(csv_inputs, csv_inputs[,col_split] == split_values)
     # write the CSV of the split
     readr::write_csv(csv_inputs, file = paste0(SCOPE_dir, "input/dataset for_verification/", deparse(quote(csv_inputs)), ".csv"))
-  }else{
+
+    }else{
     # If false write the CSV
     readr::write_csv(csv_inputs, file = paste0(SCOPE_dir, "input/dataset for_verification/", deparse(quote(csv_inputs)), ".csv"))
-  }
+    }
+
   ###### set model inputs and settings
   ### model inputs to run with - name
   filenames_d <- readr::read_csv(paste0(SCOPE_dir, "input/",deparse(quote(filenames)),".csv"),
                                  show_col_types = FALSE, col_names = FALSE)
 
-  filenames_d[c(4,7,16,35,36,37,38,39,40,41,42,43,44,45,46,48,49,
-                50,51,52,53,55,56,57,58,60,61,62,63,65,66,68,69),2] <- c(Simulation_Name, soil_file,
-                                                                      paste0("csv_inputs",".csv"), t, Rin, Rli, p, Ta, u, ea, RH, VPD, tts, tto, psi,
+  filenames_d[c(4,7,16,35,36,37,38,39,40,41,42,43,44,45,47,48,49,
+                50,51,52,54,55,56,57,59,60,61,62,64,65,67,68),2] <- c(Simulation_Name, soil_file,
+                                                                      paste0("csv_inputs",".csv"), t, Rin, Rli, p, Ta, u, ea, RH, tts, tto, psi,
                                                                       Cab, Cca, Cdm, Cw, Cs, Cant, SMC, BSMBrightnes, BSMlat, BSMlon,
                                                                       LAI, hc, LIDFa, LIDFb, z, Ca, Vcmax25, BallBerrySlope)
 
@@ -305,4 +321,3 @@ run_SCOPE <- function(
 
   system('matlab -useStartupFolderPref -r "SCOPE; exit"')
 }
-
