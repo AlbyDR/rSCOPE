@@ -18,7 +18,7 @@ model_inputs <- function(SCOPE_dir
                                         deparse(quote(filenames)),".csv"), col_names = FALSE)
 
   variables <- filenames_d[c(4,7,16,35,36,37,38,39,40,41,42,43,44,45,47,48,49,
-                50,51,52,54,55,56,57,59,60,61,62,64,65,67,68),]
+                50,51,52,54,55,56,57,59,60,61,62,64,65,67,68,69),]
 
   contants <- readr::read_csv(paste0(SCOPE_dir, "input/",
                                          deparse(substitute(input_data_default)),".csv"), col_names = FALSE)

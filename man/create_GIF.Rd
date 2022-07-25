@@ -7,39 +7,39 @@
 create_GIF(
   map,
   period = "month",
-  gif_subtitle = "Predicted ET [mm/month] - Berlin 2020",
-  water_mask = water_polygons,
-  border = Berlin_border_utm,
+  gif_subtitle,
+  water_mask,
+  border,
   limits_scale = c(0, 100),
   breaks_scale = seq(0, 100, 20),
-  colors_pallete = ETcolor,
+  colors_pallete,
   time_interval = 0.8,
   loops = 1,
   movie_name = "Urban_ET.gif"
 )
 }
 \arguments{
-\item{map}{a data.frame with SCOPE outputs, a datetime variable and pixel numbers (timestamp, id_pixel) from the get_prediction function}
+\item{map}{sf map with with Urban ET per month derived from the map_urbanET()}
 
-\item{period}{= "month" to define the day to calculate the indices}
+\item{period}{animated by "month" or "24hours", default = "month"}
 
-\item{gif_subtitle}{= "Predicted ET (mm/month) - Berlin 2020", variables to map, default c("ET", "Tsave"),}
+\item{gif_subtitle}{map title, e.g. "Predicted ET (mm/month) - Berlin 2020"}
 
-\item{water_mask}{= water_polygons, the grip template (raster object, the same as the interpolation)}
+\item{water_mask}{sf object with water bodies to mask}
 
-\item{border}{= Berlin_border_utm, a vector the raster grid id_pixel masked and excluded from the SCOPE run}
+\item{border}{sf object with the city border}
 
-\item{limits_scale}{= c(0,100), name of the sf polygon map object}
+\item{limits_scale}{scale limits of the map's legend, e.g. c(0,100)}
 
-\item{breaks_scale}{= seq(0, 100, 20),  name of the vegetation fraction variable}
+\item{breaks_scale}{map's legend breaks, e.g. seq(0, 100, 20)}
 
-\item{colors_pallete}{= ETcolor, get the max ET form the 1km grid, default = 'max', faster and suitable in case of coarse grid}
+\item{colors_pallete}{continuous colour pallete for the map}
 
-\item{time_interval}{= .8,}
+\item{time_interval}{time between each map in the animation default = .8 sec,}
 
-\item{loops}{= 1,}
+\item{loops}{number of loops, default = 1}
 
-\item{movie_name}{= "Urban_ET.gif"}
+\item{movie_name}{= name of the GIF file, default = "Urban_ET.gif"}
 }
 \value{
 a GIF file saved in the R project directory.
