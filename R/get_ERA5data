@@ -1,0 +1,47 @@
+######################################################################
+######################################################################
+# function download ERA5 data
+######################################################################
+######################################################################
+get_ERA5 <- function(
+    product_type = "reanalysis",
+    format = "netcdf",
+    city_border = NA,
+    user_cds = NA,
+    var = NA,
+    year_vec = NA,
+    month_vec = NA,
+    day_vec = NA,
+    time_vec = NA,
+    path_file = "D:/Research topics/Data-Modelling/EUcities/Meteo/",
+    dataset = NA
+    
+){
+  
+  request <- lapply(1:length(city_border), FUN=function(i) list(
+    product_type = "reanalysis",
+    format = "netcdf",
+    variable = var, #
+    year = year_vec,
+    month = month_vec,
+    day = day_vec,
+    time = time_vec,
+    area = c(city_border[[i]]$latlon$bbox_border[4] + 0.5,
+             city_border[[i]]$latlon$bbox_border[1] - 0.5,
+             city_border[[i]]$latlon$bbox_border[3] - 0.5,
+             city_border[[i]]$latlon$bbox_border[2] + 0.5),
+    dataset_short_name = dataset,
+    target = paste0(names(city_border)[i], "-", var, "-", dataset, ".nc")))
+  
+  
+  for (i in 1:length(city_border)) {
+    R.utils::withTimeout({
+      ecmwfr::wf_request(user = user_cds,   # user ID (for authentification)
+                         request  = request[[i]],  # the request
+                         transfer = TRUE,     # download the file
+                         path = path_file)# store data in current working directory
+    }, timeout = 30, onTimeout = "warning")
+    
+  }
+}
+############################################################################
