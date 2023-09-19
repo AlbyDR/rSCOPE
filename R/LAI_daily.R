@@ -1,4 +1,49 @@
-# LAI_daily
+#' LAI_daily
+#'
+#' This is a function convert in daily values the downloaded LAI images for a location from the Copernicus Vito portal.
+#' @param start_date start date of the images , e.g. "2017-12-01"
+#' @param end_date end date of the images
+#' @param LAI_rast raster with 10 day (+ gaps) LAI layers
+#' @param crop_area, a sf polygon with desirable the extent
+#' @return a raster with daily values of LAI
+#' @examples
+#'
+#' # file list downloaded from get_LAI
+#' file_names <- list.files(path = paste0("D:/Data-Modelling/", "LAI/"),
+#'                          pattern = "*.nc", recursive = TRUE)
+#'
+#' file_names <- file_names[1:173]
+#'
+#' file_names_patch <- sapply(1:length(file_names), FUN = function(i)
+#'                            paste0("D:/Data-Modelling/", "LAI/", file_names[i]))
+#  # check var name
+#' names(nc_open("D:/Data-Modelling//LAI/2020/LAI_20201231.nc")$var)
+#'
+#  # open global images
+#' LAI_copernicus_globe <- terra::rast(file_names_patch, "LAI")
+#' # crop to EU to reduce size
+#' LAI_EU <- terra::crop(LAI_copernicus_globe, terra::ext(-10.125, 30.125, 29.875, 65.125))
+#' plot(LAI_EU[[121]])
+#'
+#' rm(LAI_copernicus_globe)
+#'
+#' # layers name and time
+#' names(LAI_EU) <- rev(LAI_links[[2]])
+#' terra::time(LAI_EU) <- lubridate::ymd(rev(LAI_links[[2]]))
+#'
+#' # save
+#' terra::writeRaster(LAI_EU, "LAI_EU.tif", overwrite = TRUE)
+#'
+#' LAI_Berlin <-  LAI_daily(star_data = as.Date("2018-01-10", tz="UTC"),
+#'                          end_data = as.Date("2022-09-10", tz="UTC"),
+#'                          LAI_rast = LAI_EU,
+#'                          crop_area = obj_locations_cities$DE_Berlin_TUCC$latlon$buffer_dist)
+#'
+#' plot(LAI_Berlin[[c(2,10,30,120)]])
+#' }
+#'
+#' @export
+#
 # function 2 - daily LAI for a city/location
 
 LAI_daily <- function(
@@ -59,5 +104,3 @@ LAI_daily <- function(
   return(LAI_daily)
 
 }
-##################################################################################
-##################################################################################

@@ -1,5 +1,4 @@
 #' get_LAI.R
-
 #' This is a function download maps download the LAI 300m images from the Copernicus Vito portal.
 #' @param user_VITO user name from the Copernicus Vito portal
 #' @param pass_VITO, password from the Copernicus Vito portal
