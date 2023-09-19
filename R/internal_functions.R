@@ -471,3 +471,24 @@ get_FPprobII <- function(
 
 }
 ########################################
+
+
+open_UrbanAtlas <- function(
+    city_border = NA,
+    i_city = NA,
+    file_name = NA,
+    dest_file = NA
+
+){
+
+  LULC <-  sf::st_read(paste0(dest_file, file_name))
+
+  #LULC <- sf::st_transform(LULC, crs = crs(city_border[[i_city]]$latlon$border))
+  LULC <- sf::st_transform(LULC["class_2018"], crs = sf::st_crs(city_border[[i_city]]$latlon$border))
+
+  # give values of vegetation fraction per LULC
+  LULC_city <- sf::st_crop(LULC, sf::st_bbox(city_border[[i_city]]$latlon$buffer_dist) )
+
+  return(LULC_city)
+
+}
