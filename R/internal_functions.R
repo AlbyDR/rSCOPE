@@ -147,3 +147,285 @@ set_names <- function(x, colnames) {
   names(x) <- colnames
   return(x)
 }
+
+
+##################################################################################
+# function - open the GCH downloaded
+#######################################################################################
+open_GCH <- function(
+    city_name = NA,
+    crop_area = NA,
+    list_GCH = NA,
+    patch_file = NA
+    
+){
+  
+  canopy_height <- NULL
+  
+  if(length(list_GCH) > 1){
+    
+    canopy_height_list <- list(terra::rast(paste0(patch_file, "GCH_map_", city_name, "_1",".tif")),
+                               #terra::rast(paste0(patch_file, "GCH_map_", city_name, "_2",".tif")),
+                               terra::rast(paste0(patch_file, "GCH_map_", city_name, "_3",".tif")),
+                               terra::rast(paste0(patch_file, "GCH_map_", city_name, "_2",".tif"))
+                               )
+    
+    rsrc <- terra::sprc(canopy_height_list)
+    merge <- terra::merge(rsrc)
+    
+    canopy_height <- terra::crop(merge, crop_area)
+    
+  }else{
+    
+    single <- terra::rast(paste0(patch_file, "GCH_map_", city_name, "_1",".tif"))
+    
+    canopy_height <- terra::crop(single, crop_area)
+    
+  }
+  
+  return(canopy_height)
+  
+}
+
+##################################################################################
+  # function - Impervious LULC
+##################################################################################
+get_nonimpervious <- function(
+    file_patch = NA,
+    file_pattern = "_v020.tif$",
+    bbox = NA,
+    prj = "+proj=longlat +datum=WGS84 +no_defs"
+    
+){
+  
+  Impervious_list <- list.files(path = file_patch, pattern = file_pattern, full.names = TRUE)
+  
+  raster_list <- lapply(Impervious_list, terra::rast)
+  raster_list <- lapply(raster_list, "+", 0)
+  raster_list <- lapply(raster_list, classify, cbind(255, 0))
+  rsrc <- terra::sprc(raster_list)
+  impervious <- terra::merge(rsrc)
+  
+  bbox_laea <- sf::st_transform(bbox, "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m +no_defs")
+  
+  impervious_prj <- terra::crop(impervious, bbox_laea)
+  
+  impervious_prj <- terra::project(impervious_prj, prj_utm)
+  
+  impervious <- (1-impervious_prj/100)
+  
+  names(impervious) <- "non-impervious"
+  
+  return(impervious)
+  
+}
+
+
+
+##################################################################################
+##################################################################################
+# function - daily LAI for a city/location
+##################################################################################
+##################################################################################
+LAI_daily <- function(
+    star_data = NA,
+    end_data = NA,
+    LAI_rast = NA,
+    crop_area = NA
+    
+){
+  
+  #### Create a timestamp ####
+  # Generate Regular Sequences of Dates
+  tsLAI = seq.Date(star_data, end_data, by = "day") 
+  
+  #### Timestamp names ####
+  # create the timestamp name to be the same of the LAI images
+  
+  tsLAI_names <- sapply(1:length(tsLAI), FUN=function(i)
+    paste0("",
+           substring(tsLAI[i], 1, 4),"",
+           substring(tsLAI[i], 6, 7),"",
+           substring(tsLAI[i], 9, 10) 
+    ))
+  
+  LAI_crop <- terra::crop(LAI_rast, crop_area)
+  
+  LAI_crop_interpolated <- terra::approximate(LAI_crop, rule = 2)
+  
+  # I created a NULL raster
+  raster_null <- LAI_crop_interpolated[[2]]
+  values(raster_null) <- NA
+  
+  #### Create a raster with all days ####
+  # create a raster stack with the 365 days 
+  # 365 days of NA
+  LAI_daily <- replicate(length(tsLAI_names), raster_null)
+  
+  names(LAI_daily) <- tsLAI_names
+  
+  for (i in 1:length(LAI_daily)) {
+    names(LAI_daily[[i]]) <- tsLAI_names[i]
+  }
+  
+  for (i in 1:length(LAI_daily)) {
+    terra::time(LAI_daily[[i]]) <- lubridate::ymd(tsLAI_names[i])
+  }
+  
+  #### Replace real LAI images in the NA rasters ####
+  for (i in 1:nlyr(LAI_rast)) {
+    LAI_daily[[names(LAI_crop_interpolated)[i]]] <- LAI_crop_interpolated[[i]]
+  }
+  
+  ### stack all list rasters
+  LAI_daily_s <- terra::rast(LAI_daily)
+  
+  LAI_daily <- terra::approximate(LAI_daily_s, rule = 2)
+  
+  return(LAI_daily)
+  
+}
+##################################################################################
+ # function - convert the input raster into  the FP raster                       
+##################################################################################
+
+raster_to_FPgrid <- function(
+    # FP parameters for Calculate from FREddyPro
+  fetch = NA, 
+  grid = 200, 
+  utm_x_lon = NA,
+  utm_y_lat = NA, 
+  ### Raster
+  water_polygons = NA,
+  input_raster = NA,
+  prj = "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs"
+  # if a data frame is used include a one layer raster template that match the df
+){ # If TRUE crop and reproject for the footprint resolution/extent
+  
+  footprint <- FREddyPro::exportFootprintPoints(FREddyPro::Calculate(fetch = fetch,
+                                                                     height = 40,
+                                                                     grid = grid,
+                                                                     speed = 2.58,
+                                                                     direction = 194,
+                                                                     uStar = 0.134,
+                                                                     zol = 1.06,
+                                                                     sigmaV = sqrt(0.094)*5),
+                                                xcoord = utm_x_lon,
+                                                ycoord = utm_y_lat)
+  # convert to terra (utm)
+  footprint <- terra::rast(footprint, type = "xyz",
+                           crs = prj)
+  
+  input_fp_raster <- terra::crop(input_raster, terra::ext(footprint))
+  
+  #input_fp_raster <- terra::mask(input_fp_raster, water_polygons, inverse = T)
+  
+  fp_raster <- terra::project(input_fp_raster, footprint)
+  
+  #fp_raster <- terra::mask(fp_raster, water_polygons, inverse = T)
+  
+  return(fp_raster)
+}
+
+
+##################################################################################
+ # function - get the FP probability raster with zol as a function of = (zm-zd)/L                      
+##################################################################################
+get_FPprob <- function(
+    fetch = NA, 
+    grid = NA, 
+    zm = NA,
+    zd = NA,
+    ws = NA,
+    wd = NA,
+    uStar = NA,
+    L = NA,
+    v_var = NA,
+    u_var_factor = NA,
+    utm_x_lon = NA, 
+    utm_y_lat = NA,
+    zol = zol,
+    prob = NA,
+    timestamp = NA,
+    prj = "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs"
+){ 
+  
+  ### make the footprint calculation according to Kormann and Meixner (2001) from FREddyPro
+  footprint_matrix <- FREddyPro::exportFootprintPoints(FREddyPro::Calculate(fetch = fetch,
+                                                                            height = zm-zd,
+                                                                            grid = grid,
+                                                                            speed = ws,
+                                                                            direction = wd,
+                                                                            uStar = uStar,
+                                                                            zol = (zm-zd)/L,
+                                                                            sigmaV = sqrt(v_var*u_var_factor)),
+                                                       xcoord = utm_x_lon,
+                                                       ycoord = utm_y_lat)
+  
+  # convert to terra (utm)
+  footprint <- terra::rast(footprint_matrix, type = "xyz", crs = prj)
+  # input_raster <- terra::crop(input_raster, terra::extent(footprint))
+  
+  prob_value <- terra::global(footprint, quantile, probs = prob, names = FALSE, na.rm = TRUE)[[1]]
+  
+  # reduce the FP area to the elipse that the probability is equal to the input FP_probs (suggested 0.99)
+  footprint <- terra::app(footprint, fun = function(x){ x[x <= prob_value] <- NA; return(x)} )
+  
+  terra::time(footprint) <- timestamp
+  
+  names(footprint) <- REddyProc::POSIXctToBerkeleyJulianDate(timestamp)
+  
+  return(footprint)
+  
+}
+
+##################################################################################
+ # function - get the FP probability raster with zol = z.d.L already calculated                     
+##################################################################################
+get_FPprobII <- function(
+    fetch = NA, 
+    grid = NA, 
+    zm = NA,
+    zd = NA,
+    ws = NA,
+    wd = NA,
+    uStar = NA,
+    z.d.L = NA,
+    v_var = NA,
+    u_var_factor = NA,
+    utm_x_lon = NA, 
+    utm_y_lat = NA,
+    prob = NA,
+    timestamp = NA,
+    prj = "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs"
+){ 
+  
+  ### make the footprint calculation according to Kormann and Meixner (2001) from FREddyPro
+  footprint_matrix <- FREddyPro::exportFootprintPoints(FREddyPro::Calculate(fetch = fetch,
+                                                                            height = zm-zd,
+                                                                            grid = grid,
+                                                                            speed = ws,
+                                                                            direction = wd,
+                                                                            uStar = uStar,
+                                                                            zol = z.d.L,
+                                                                            sigmaV = sqrt(v_var*u_var_factor)),
+                                                       xcoord = utm_x_lon,
+                                                       ycoord = utm_y_lat)
+  
+  # convert to terra (utm)
+  footprint <- terra::rast(footprint_matrix, type = "xyz", crs = prj)
+  # input_raster <- terra::crop(input_raster, terra::extent(footprint))
+  
+  prob_value <- terra::global(footprint, quantile, probs = prob, names = FALSE, na.rm = TRUE)[[1]]
+  
+  # reduce the FP area to the elipse that the probability is equal to the input FP_probs (suggested 0.99)
+  footprint <- terra::app(footprint, fun = function(x){ x[x <= prob_value] <- NA; return(x)} )
+  
+  terra::time(footprint) <- timestamp
+  
+  names(footprint) <- REddyProc::POSIXctToBerkeleyJulianDate(timestamp)
+  
+  return(footprint)
+  
+}
+########################################
