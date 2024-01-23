@@ -119,10 +119,15 @@ get_accuracy <- function(
 
     obs_vec <- filtered[,2]
 
-    Predictions_metrics <- lapply(1:length(predictions), function(i) metric_function(
-      predictions_df[i+2],
-      truth = obs_vec,
-      estimate = "pred", na_rm = TRUE))
+    data_obs_pred <- tibble(obs_vec, predictions_df)
+
+    names(data_obs_pred)[-1] <- paste0("pred", "_",1:length(predictions_df))
+
+    Predictions_metrics <- lapply(2:length(predictions_df),
+                                  function(i) metric_function(data_obs_pred,
+                                                              truth = "obs_vec",
+                                                              estimate = paste0("pred", "_", i),
+                                                              na_rm = TRUE))
 
     metrics_table <- data.frame(t(sapply(1:(length(predictions)), function(i) Predictions_metrics[[i]]$.estimate)))
     colnames(metrics_table) <- Predictions_metrics[[1]]$.metric
@@ -142,10 +147,15 @@ get_accuracy <- function(
   predictions_df <- predictions
   names(predictions_df) <- rep("pred",length(predictions_df))
 
-  Predictions_metrics <- lapply(1:length(predictions_df), function(i) metric_function(
-    predictions_df[i],
-    truth = obs_vec,
-    estimate = "pred", na_rm = TRUE))
+  data_obs_pred <- tibble(obs_vec, predictions_df)
+
+  names(data_obs_pred)[-1] <- paste0("pred", "_",1:length(predictions_df))
+
+  Predictions_metrics <- lapply(2:length(predictions_df),
+                                function(i) metric_function(data_obs_pred,
+                                                            truth = "obs_vec",
+                                                            estimate = paste0("pred", "_", i),
+                                                            na_rm = TRUE))
 
   metrics_table <- data.frame(t(sapply(1:length(predictions_df), function(i) Predictions_metrics[[i]]$.estimate)))
   colnames(metrics_table) <- Predictions_metrics[[1]]$.metric
