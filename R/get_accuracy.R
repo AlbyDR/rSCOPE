@@ -115,20 +115,16 @@ get_accuracy <- function(
 
     predictions_df <- dplyr::left_join(filtered[,1:2], predictions_df, by = "timestamp")
 
-    names(predictions_df) <- c("timestamp", "obs_vec", rep("pred", length(predictions)))
+    names(predictions_df) <- c("timestamp", "obs_vec", paste0("pred", "_", 1:length(predictions)))
 
     obs_vec <- filtered[,2]
 
-    data_obs_pred <- tibble(obs_vec, predictions_df)
-
-    names(data_obs_pred)[1] <- "obs_vec"
-    names(data_obs_pred)[-1] <- paste0("pred", "_",1:length(predictions_df))
-
-    Predictions_metrics <- lapply(1:length(predictions_df),
-                                  function(i) metric_function(data_obs_pred,
+    Predictions_metrics <- lapply(1:length(predictions),
+                                  function(i) metric_function(predictions_df,
                                                               truth = "obs_vec",
                                                               estimate = paste0("pred", "_", i),
                                                               na_rm = TRUE))
+
 
     metrics_table <- data.frame(t(sapply(1:(length(predictions)), function(i) Predictions_metrics[[i]]$.estimate)))
     colnames(metrics_table) <- Predictions_metrics[[1]]$.metric
@@ -146,7 +142,6 @@ get_accuracy <- function(
 
 
   predictions_df <- predictions
-  names(predictions_df) <- rep("pred",length(predictions_df))
 
   data_obs_pred <- cbind(obs_vec, predictions_df)
 
