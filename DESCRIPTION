@@ -13,7 +13,6 @@ depends: data.table,
 Imports: 
     data.table,
     dplyr,
-    FREddyPro,
     gstat,
     httr,
     lubridate,
