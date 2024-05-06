@@ -1,14 +1,14 @@
 Package: rSCOPE
 Type: Package
-Title: Run SCOPE throuth R
+Title: Run SCOPE model through R
 Version: 0.1.0
 Author: Alby Duarte Rocha
+Authors@R: person("Alby", "Duarte Rocha", email = "a.duarterocha@tu-berlin.de", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6370-1240"))
 Maintainer: The package maintainer <a.duarterocha@tu-berlin.de>
 Description: This package compile function to: 1) prepare inputs parameters for modelling with SCOPE, including download DWD data, Berlin Environmental Atlas, and LAI copernicus, interpolate to a grid for multiple timestamps; 2) clean Eddy covariance flux data; 3) extract surface properties using footprint modelling; 4) run SCOPE using, selecting the inputs parameters (variables and contants) and model setting; 5) analyse the results, checking the inputs simulated, output preditions and accuracy. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
 depends: data.table,
 Imports: 
     data.table,
@@ -31,4 +31,5 @@ Imports:
     suncalc,
     gtools,
     ggspatial,
-    ggplot2,
+    ggplot2
+RoxygenNote: 7.3.1

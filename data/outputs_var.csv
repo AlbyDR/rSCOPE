@@ -1,0 +1,88 @@
+variable_name,unit,description,simulation_file,setting
+simulation_number,-,time step counter,fluxes.csv,calc_ebal
+nu_iterations,-,number of iterations in energy balance,fluxes.csv,calc_ebal
+year,-,year,fluxes.csv,calc_ebal
+DoY,-,decimal day of year (DOY),fluxes.csv,calc_ebal
+Rnctot,W m-2,net radiation of canopy,fluxes.csv,calc_ebal
+lEctot,W m-2,latent heat flux of canopy (transpiration),fluxes.csv,calc_ebal
+Hctot,W m-2,sensible heat of canopy,fluxes.csv,calc_ebal
+Actot,umol m-2 s-1,net photosynthesis of canopy,fluxes.csv,calc_ebal
+Tcave,degree Celsius,weighted average canopy temperature,fluxes.csv,calc_ebal
+Rnstot,W m-2,net radiation of soil,fluxes.csv,calc_ebal
+lEstot,W m-2,latent heat flux of soil (evaporation),fluxes.csv,calc_ebal
+Hstot,W m-2,sensible heat of soil,fluxes.csv,calc_ebal
+Gtot,W m-2,soil heat flux,fluxes.csv,calc_ebal
+Tsave,degree Celsius,weighted average soil temperature,fluxes.csv,calc_ebal
+Rntot,W m-2,total net radiation,fluxes.csv,calc_ebal
+lEtot,W m-2,total latent heat flux,fluxes.csv,calc_ebal
+Htot,W m-2,total sensible heat,fluxes.csv,calc_ebal
+Photosynthesis,umol m-2 s-1,net photosynthesis of canopy (Actot),vegetation.csv,calc_ebal
+Electron_transport,umol m-2 s-1,electron transport rate (Ja),vegetation.csv,calc_ebal
+NPQ_energy,W m-2,non-photochemical quenching [energy units],vegetation.csv,calc_ebal
+NPQ_photon,umol m-2 s-1,non-photochemical quenching,vegetation.csv,calc_ebal
+canopy_level_FQE,umol photons (umol photons)-1,fluorescence quantum yield at canopy level,vegetation.csv,calc_ebal
+LST,K,land surface temperature,vegetation.csv,calc_ebal
+emis,-,thermal energy emissivity,vegetation.csv,calc_ebal
+iPAR,umol m-2 s-1,intercepted PAR,aPAR.csv,calc_ebal
+iPARE,W m-2,intercepted PAR [energy units],aPAR.csv,calc_ebal
+LAIsunlit,m2 m-2,leaf area index of sunlit leaves,aPAR.csv,calc_ebal
+LAIshaded,m2 m-2,leaf area index of shaded leaves,aPAR.csv,calc_ebal
+aPARtot,umol m-2 s-1,absorbed PAR by all leaves,aPAR.csv,calc_ebal
+aPARsun,umol m-2 s-1,absorbed PAR by sunlit leaves,aPAR.csv,calc_ebal
+aPARsha,umol m-2 s-1,absorbed PAR by shaded leaves,aPAR.csv,calc_ebal
+aPARCabtot,umol m-2 s-1,"absorbed PAR by chlorophylls a,b of all leaves",aPAR.csv,calc_ebal
+aPARCabsun,umol m-2 s-1,"absorbed PAR by chlorophylls a,b of sunlit leaves",aPAR.csv,calc_ebal
+aPARCabsha,umol m-2 s-1,"absorbed PAR by chlorophylls a,b of shaded leaves",aPAR.csv,calc_ebal
+aPARCartot,umol m-2 s-1,absorbed PAR by carotenoinds of all leaves,aPAR.csv,calc_ebal
+aPARCarsun,umol m-2 s-1,absorbed PAR by carotenoinds of sunlit leaves,aPAR.csv,calc_ebal
+aPARCarsha,umol m-2 s-1,absorbed PAR by carotenoinds of shaded leaves,aPAR.csv,calc_ebal
+aPARtotE,W m-2,absorbed PAR by all leaves [energy units],aPAR.csv,calc_ebal
+aPARsunE,W m-2,absorbed PAR by sunlit leaves [energy units],aPAR.csv,calc_ebal
+aPARshaE,W m-2,absorbed PAR by shaded leaves [energy units],aPAR.csv,calc_ebal
+aPARCabtotE,W m-2,"absorbed PAR by chlorophylls a,b of all leaves [energy units]",aPAR.csv,calc_ebal
+aPARCabsunE,W m-2,"absorbed PAR by chlorophylls a,b of sunlit leaves [energy units]",aPAR.csv,calc_ebal
+aPARCabshaE,W m-2,"absorbed PAR by chlorophylls a,b of shaded leaves [energy units]",aPAR.csv,calc_ebal
+aPARCartotE,W m-2,absorbed PAR by carotenoinds of all leaves [energy units],aPAR.csv,calc_ebal
+aPARCarsunE,W m-2,absorbed PAR by carotenoinds of sunlit leaves [energy units],aPAR.csv,calc_ebal
+aPARCarshaE,W m-2,absorbed PAR by carotenoinds of shaded leaves [energy units],aPAR.csv,calc_ebal
+variable,units,description,resistances.csv,calc_ebal
+raa,s m-1,aerodynamic resistance above the canopy,resistances.csv,calc_ebal
+raws,s m-1,aerodynamic resistance within the soi,resistances.csv,calc_ebal
+rss,s m-1,soil resistance to evaporation,resistances.csv,calc_ebal
+ustar,m s-1,friction velocity u*,resistances.csv,calc_ebal
+simulation_number,-,time step counter,radiation.csv,calc_ebal
+HemisOutShort (Eouto),W m-2,hemispherical outgoing shortwave radiation,radiation.csv,calc_ebal
+HemisOutLong (Eoutt + Eoutte),W m-2,hemispherical outgoing longwave radiation,radiation.csv,calc_ebal
+HemisOutTot (Eouto + Eoutt + Eoutte),W m-2,total hemispherical outgoing radiation,radiation.csv,calc_ebal
+Net (Rntot),W m-2,total net radiation,radiation.csv,calc_ebal
+Lo_ * pi / (Esun_ + Esky_),-,fraction of radiation in observation direction * pi / irradiance,reflectance.csv,save_spectral
+rsd,-,directional-hemispherical reflectance factor,rsd.csv,save_spectral
+rdd,-,bi-hemispherical reflectance factor,rdd.csv,save_spectral
+rso,-,bi-directional reflectance factor,rso.csv,save_spectral
+rdo,-,hemispherical-directional reflectance factor,rdo.csv,save_spectral
+Eout_,W m-2 um-1,hemispherical outgoing radiation spectrum,Eout_spectrum.csv,save_spectral
+Lotot_,W m-2 um-1 sr-1,radiance spectrum in observation direction excluding fluorescence,Lo_spectrum.csv,save_spectral
+Esun_,W m-2 um-1,direct top of canopy irradiance,Esun.csv,save_spectral
+Esky_,W m-2 um-1,diffuse top of canopy irradiance,Esky.csv,save_spectral
+F_1stpeak,W m-2 um-1 sr-1,rad.F685,fluorescence_scalars.csv,calc_fluor or calc_planck
+wl_1stpeak,nm,rad.wl685,fluorescence_scalars.csv,calc_fluor or calc_planck
+F_2ndpeak,W m-2 um-1 sr-1,rad.F740,fluorescence_scalars.csv,calc_fluor or calc_planck
+wl_2ndpeak,nm,rad.wl740,fluorescence_scalars.csv,calc_fluor or calc_planck
+F687,W m-2 um-1 sr-1,rad.F687,fluorescence_scalars.csv,calc_fluor or calc_planck
+F760,W m-2 um-1 sr-1,rad.F760,fluorescence_scalars.csv,calc_fluor or calc_planck
+LFtot,W m-2 um-1 sr-1,rad.LoutF,fluorescence_scalars.csv,calc_fluor or calc_planck
+EFtot,W m-2,rad.EoutF,fluorescence_scalars.csv,calc_fluor or calc_planck
+EFtot_RC,W m-2,rad.EoutFrc,fluorescence_scalars.csv,calc_fluor or calc_planck
+LoF_,W m-2 um-1 sr-1,fluorescence per wavelength in observation direction,fluorescence.csv,calc_fluor or calc_planck
+sigmaF,sr-1,escape probability,sigmaF.csv,calc_fluor or calc_planck
+EoutF_,W m-2 um-1,TOC hemispherically integrated fluorescence,fluorescence_hemis.csv,calc_fluor or calc_planck
+EoutFrc_,W m-2 um-1,fluorescence_spectrum 640:1:850 nm reabsorption corrected,fluorescence_ReabsCorr.csv,calc_fluor or calc_planck
+Lototf_,W m-2 um-1 sr-1,upwelling radiance in observation direction including fluorescence,Lo_spectrum_inclF.csv,calc_fluor or calc_planck
+(Lo_ + LoF_) * pi / (Esun_ + Esky_),-,fraction of radiation in observation direction + emitted fluorescen,apparent_reflectance.csv,calc_fluor or calc_planck
+wlS,nm,full wl range SCOPE,Directional/Angles(SunAngle_x_degrees).dat,calc_directional and calc_ebal
+brdf_,-,bidirectional reflectance distribution function,Directional/Angles(SunAngle_x_degrees).dat,calc_directional and calc_ebal
+BrightnessT,K,brightness temperature,Directional/Angles(SunAngle_x_degrees).dat,"calc_directional, calc_ebal and calc_planck"
+wlT,nm,thermal wl range SCOPE,Directional/Angles(SunAngle_x_degrees).dat,"calc_directional, calc_ebal and calc_planck"
+Lot_,W m-2 um-1 sr-1,outgoing thermal radiation in observation direction,Directional/Angles(SunAngle_x_degrees).dat,"calc_directional, calc_ebal and calc_planck"
+wlF,nm,fluorescence wl range SCOPE,Directional/Fluorescence (SunAngle_x_degrees).dat,"calc_directional, calc_ebal and calc_fluor"
+LoF_,W m-2 um-1 sr-1,outgoing fluorescence radiation in observation direction,Directional/Fluorescence (SunAngle_x_degrees).dat,"calc_directional, calc_ebal and calc_fluor"

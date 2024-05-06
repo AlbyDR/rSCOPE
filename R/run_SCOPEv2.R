@@ -6,7 +6,8 @@
 #' @param SCOPE_dir the patch to the SCOPE directory.
 #' @param Simulation_Name the name of the files start with
 #' @param t the variable name in the df for the BerkeleyJulianDate, e.g. "t".
-#' @param Rin,Rin the variables Rin (shortwave solar radiation), Rli (longwave radiation).
+#' @param Rli, the variables Rin (shortwave solar radiation).
+#' @param Rin, Rli (longwave radiation).
 #' @param p,Ta,RH,ea the variables p (air pressure), Ta (air temperature), RH (relative humidity), ea (vapour pressure).
 #' @param u the variable (wind speed).
 #' @param psi the variables psi (relative angle), tts (zenith solar angle), tto (observed angle).
@@ -192,7 +193,7 @@ run_SCOPEv2 <- function(
     soil_file = "soilnew.txt",
 
     # time BerkeleyJulianDate  # atmosphere conditions
-    t = NA,  Rin = NA, Rli = NA, p = NA, Ta = NA, RH = NA, ea = NA, u = NA,
+    t = NA, Rin = NA, Rli = NA, p = NA, Ta = NA, RH = NA, ea = NA, u = NA,
     # geometry                    #z          #CO2
     tts = NA, tto = NA, psi = NA, z = NA, Ca = NA,
     # soil

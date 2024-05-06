@@ -83,7 +83,7 @@ get_SMCdata <- function(
   ts <- seq(as.POSIXct(start_date, tz = "UTC"), as.POSIXct(end_date, tz = "UTC"),
             by = "day") #"30 min"
 
-  ts <- force_tz(ts, tz = "UTC")
+  ts <- lubridate::force_tz(ts, tz = "UTC")
 
   ts <- data.frame("Datum" = ts[1:(length(ts)-1)])
 

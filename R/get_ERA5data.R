@@ -46,7 +46,7 @@
 #'  area = c(53, 12, 52, 14), #
 #'  target = "Berlin_meteo_2020.nc")
 #'
-#'  ecmwfr::wf_request(user = user_cds,                           # user ID (for authentification)
+#'  ecmwfr::wf_request(user = user_cds,                   # user ID (for authentification)
 #'            request  = request_Berlin_meteo_2020,       # the request
 #'            transfer = TRUE,                            # download the file
 #'            path = "D:/Data-Modelling/EUcities/Meteo/") # store data in a directory
@@ -84,7 +84,6 @@ get_ERA5 <- function(
     dataset_short_name = dataset,
     target = paste0(names(city_border)[i], "-", var, "-", dataset, ".nc")))
 
-
   for (i in 1:length(city_border)) {
     R.utils::withTimeout({
       ecmwfr::wf_request(user = user_cds,   # user ID (for authentification)
@@ -92,7 +91,6 @@ get_ERA5 <- function(
                          transfer = TRUE,     # download the file
                          path = path_file)# store data in current working directory
     }, timeout = 30, onTimeout = "warning")
-
   }
 }
 ############################################################################

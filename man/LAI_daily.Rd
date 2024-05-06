@@ -7,13 +7,13 @@
 LAI_daily(star_data = NA, end_data = NA, LAI_rast = NA, crop_area = NA)
 }
 \arguments{
-\item{LAI_rast}{raster with 10 day LAI layers, plus gaps}
+\item{LAI_rast}{raster with 10 day (+ gaps) LAI layers}
 
 \item{crop_area, }{a sf polygon with desirable the extent}
 
 \item{start_date}{start date of the images , e.g. "2017-12-01"}
 
-\item{end_date}{end date of the images}
+\item{end_date}{, end date of the images}
 }
 \value{
 a raster with daily values of LAI
@@ -24,6 +24,7 @@ This is a function convert in daily values the downloaded LAI images for a locat
 \examples{
 
 # file list downloaded from get_LAI
+
 file_names <- list.files(path=paste0("D:/Data-Modelling/","LAI/"), pattern="*.nc", recursive=TRUE)
 
 file_names <- file_names[1:173]
@@ -52,6 +53,5 @@ LAI_Berlin <-  LAI_daily(star_data = as.Date("2018-01-10", tz="UTC"),
                          crop_area = obj_locations_cities$DE_Berlin_TUCC$latlon$buffer_dist)
 
 plot(LAI_Berlin[[c(2,10,30,120)]])
-
 
 }

@@ -154,7 +154,9 @@ run_SCOPEv2(
 
 \item{t}{the variable name in the df for the BerkeleyJulianDate, e.g. "t".}
 
-\item{Rin, Rin}{the variables Rin (shortwave solar radiation), Rli (longwave radiation).}
+\item{Rin, }{Rli (longwave radiation).}
+
+\item{Rli, }{the variables Rin (shortwave solar radiation).}
 
 \item{p, Ta, RH, ea}{the variables p (air pressure), Ta (air temperature), RH (relative humidity), ea (vapour pressure).}
 

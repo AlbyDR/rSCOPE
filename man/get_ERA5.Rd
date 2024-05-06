@@ -77,7 +77,7 @@ request_Berlin_meteo_2020 <- list(
  area = c(53, 12, 52, 14), #
  target = "Berlin_meteo_2020.nc")
 
- ecmwfr::wf_request(user = user_cds,                           # user ID (for authentification)
+ ecmwfr::wf_request(user = user_cds,                   # user ID (for authentification)
            request  = request_Berlin_meteo_2020,       # the request
            transfer = TRUE,                            # download the file
            path = "D:/Data-Modelling/EUcities/Meteo/") # store data in a directory
