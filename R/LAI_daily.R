@@ -3,19 +3,18 @@
 #' This is a function convert in daily values the downloaded LAI images for a location from the Copernicus Vito portal.
 #' @param start_date start date of the images , e.g. "2017-12-01"
 #' @param end_date end date of the images
-#' @param LAI_rast raster with 10 day (+ gaps) LAI layers
+#' @param LAI_rast raster with 10 day LAI layers, plus gaps
 #' @param crop_area, a sf polygon with desirable the extent
 #' @return a raster with daily values of LAI
 #' @examples
 #'
 #' # file list downloaded from get_LAI
-#' file_names <- list.files(path = paste0("D:/Data-Modelling/", "LAI/"),
-#'                          pattern = "*.nc", recursive = TRUE)
+#' file_names <- list.files(path=paste0("D:/Data-Modelling/","LAI/"), pattern="*.nc", recursive=TRUE)
 #'
 #' file_names <- file_names[1:173]
 #'
-#' file_names_patch <- sapply(1:length(file_names), FUN = function(i)
-#'                            paste0("D:/Data-Modelling/", "LAI/", file_names[i]))
+#' file_names_patch <- sapply(1:length(file_names), FUN = function(i) paste0("D:/Data-Modelling/", "LAI/", file_names[i]))
+#'
 #  # check var name
 #' names(nc_open("D:/Data-Modelling//LAI/2020/LAI_20201231.nc")$var)
 #'
@@ -40,7 +39,7 @@
 #'                          crop_area = obj_locations_cities$DE_Berlin_TUCC$latlon$buffer_dist)
 #'
 #' plot(LAI_Berlin[[c(2,10,30,120)]])
-#' }
+#'
 #'
 #' @export
 #
