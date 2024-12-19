@@ -1,5 +1,5 @@
 ## rSCOPE
-Run SCOPE model from R. There are functions to download and interpolate the DWD data to use as model inputs. Download Berlin Environmental Atlas maps. Calculate zd/z0 and hourly footprints to extract information about surface properties from raster layers (e.g. LAI, vegetation height and vegetation cover). Organize the model inputs and run SCOPE. Get the parameters (input, constant and settings), calculate model accuracy. Functions to generate Urban ET maps and indices of greening cooling services, and also create a animate 24 hours or month ET GIF maps. 
+Run SCOPE model from R. There are functions to download and interpolate the DWD and ERA5 data to use as model inputs. Download Berlin Environmental Atlas maps. Calculate zd/z0 and hourly footprints to extract information about surface properties from raster layers (e.g. LAI, vegetation height and vegetation cover). Organize the model inputs and run SCOPE. Get the parameters (input, constant and settings), calculate model accuracy. Functions to generate Urban ET maps and indices of greening cooling services, and also create a animate 24 hours or month ET GIF maps. 
 
 ### To install rSCOPE, use:
 ```r
